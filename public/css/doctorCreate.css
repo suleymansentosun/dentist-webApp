@@ -1,0 +1,11 @@
+#createDoctor, .form-control, .btn {
+    font-size: 0.9rem;
+}
+
+#cancel_btn {
+    padding-left: 0px;
+}
+
+.disabled-option {
+    background-color: rgb(196, 196, 196);
+}

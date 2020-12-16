@@ -1,0 +1,7 @@
+#createBooking, .form-control, .btn {
+    font-size: 0.9rem;
+}
+
+#cancel_btn {
+    padding-left: 0px;
+}

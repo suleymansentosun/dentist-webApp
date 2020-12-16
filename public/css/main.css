@@ -1,0 +1,624 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  /* GLOBAL STYLES
+  -------------------------------------------------- */
+  /* Padding below the footer and lighter body text */
+
+  body {
+    padding-bottom: 3rem;
+    color: #5a5a5a;
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+
+
+  /* CUSTOMIZE THE CAROUSEL
+  -------------------------------------------------- */
+
+  /* Carousel base class */
+  .carousel {
+    margin-bottom: 4rem;
+  }
+  /* Since positioning the image, we need to help out the caption */
+  .carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+  }
+
+  /* Declare heights because of positioning of img element */
+  .carousel-item {
+    height: 32rem;
+  }
+  .carousel-item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 32rem;
+  }
+
+
+  /* MARKETING CONTENT
+  -------------------------------------------------- */
+
+  /* Center align the text within the three columns below the carousel */
+  .marketing .col-lg-4 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .marketing h2 {
+    font-weight: 400;
+  }
+  .marketing .col-lg-4 p {
+    margin-right: .75rem;
+    margin-left: .75rem;
+  }
+
+
+  /* Featurettes
+  ------------------------- */
+
+  .featurette-divider {
+    margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+  }
+
+  /* Thin out the marketing headings */
+  .featurette-heading {
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -.05rem;
+  }
+
+  #create_booking_btn {
+    width: 300px;
+    font-size: large;
+    position: fixed;
+    bottom: 0;
+    transform: translateX(-50%);
+    z-index: 100;
+  }
+
+  .call-button {
+    display: block;
+    width: 250px;
+    height: 45px;
+    background: #8F8B8B;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
+    color: #fff!important;
+  }
+
+  .btn-primary.focus, .btn-primary:focus {
+    box-shadow: none
+  }
+
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    background-color: #fcfcfc;
+    padding: 0.1rem 1rem;
+    align-items: flex-start;
+    padding-left: 0px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    z-index: 1;
+    min-height: 110px;
+  }
+
+  .navbar-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .navbar-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .navbar-bottom a {
+    color: #121953;
+  }
+
+  .nav-link {
+    padding: 0px;
+  }
+
+  .navbar a {
+    color: #fff;
+  }
+
+  .navbar-middle {
+    display: flex;
+  }
+
+  .navbar-brand {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    position: absolute;
+    top: 15px;
+    left: 0px;  
+  }
+
+  .account-menu-items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .account-menu-items a.nav-link{
+    display: inline-block;
+    padding: 0px;
+    color: #121953;
+  }
+
+  #navbarCollapse {
+    justify-content: center;
+  }
+
+  #navbarCollapse ul {
+    margin-left: 0px!important;
+  }
+
+  .navbar-brand {
+    margin-right: 0px;
+  }
+
+  .navbar-toggler {
+    position: absolute;
+    right: 0%;
+    top: 65%;
+  }
+
+  ul.account-menu-list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0px;
+    padding: 0px;
+    margin-right: 20px;
+  }
+
+  ul.account-menu-list li {
+    padding-left: 10px;
+  }
+
+  .navbar-light .navbar-nav .nav-link {
+    color: #121953;
+  }
+
+  ul.contact-information {
+    display: flex;
+    list-style-type: none;
+    color: #fff;
+    justify-content: flex-end;
+    margin-bottom: 0!important;
+    margin-top: 10px;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background-color: #121953;
+    border-color: #121953;
+  }
+
+  .btn-primary:hover {
+    color: #fff;
+    background-color: #1c278b;
+    border-color: #1c278b;
+  }
+
+  .bg_text {
+    font-family: 'Raleway', sans-serif;    
+    font-size: 40px;
+    position: absolute;
+    top: 40%;
+    max-width: 45%;
+    margin-left: 20px;
+    color: #121953;
+    text-shadow: 1px 1px;
+  }
+
+  .logo_text {
+    font-family: 'Staatliches', cursive;
+    color: #121953;
+  }
+
+  #main_menu_center {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0px);
+  }
+
+  .contact_info {
+    color: #121953;
+  }
+
+  #call_btn {
+    color: #fff;
+    font-size: initial;
+  }
+
+  #location_btn {
+    font-size: initial;
+  }
+
+  ul.contact-information li {
+    margin-right: 20px;
+    margin-left: 10px;
+  }
+
+  .navbar-light .navbar-nav .nav-link:hover {
+    color: #121953;
+    box-shadow: 0 0 1px #121953;
+  }
+
+  .navbar-light .navbar-nav .active>.nav-link, .navar-light .navbar-nav .nav-link.active, .navar-light .navbar-nav .nav-link.show, .navar-light .navbar-nav .show>.nav-link {
+    color: #121953;
+  }
+
+  .dropdown-menu {
+    background-color: #121953;
+  }
+
+  .bg_image {
+    background-image: url("/img/girl_bg_image.png");
+    height: 1000px;
+    width: 1000px;
+    position: relative;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .bg-image-1 {
+    background-image: url("/img/bgImage1.png");
+    height: 1000px;
+    width: 1000px;
+    position: relative;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .bg-image-2 {
+    background-image: url("/img/girl.png");
+    height: 1000px;
+    width: 1000px;
+    position: relative;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .carousel-control-prev, .carousel-control-next {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .carousel-control-prev:hover {
+    opacity: 0;
+    cursor: auto;
+  }
+
+  .carousel-control-next:hover {
+    opacity: 0;
+    cursor: auto;
+  }
+
+  .carousel-indicators li {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+
+  .social-media-icon {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #social_media_icon_container {
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #location_list_item {
+    padding-top: 11px;
+  }
+
+  /* RESPONSIVE CSS
+  -------------------------------------------------- */
+
+  @media (min-width: 40em) {
+    /* Bump up size of carousel content */
+    .carousel-caption p {
+      margin-bottom: 1.25rem;
+      font-size: 1.25rem;
+      line-height: 1.4;
+    }
+
+    .featurette-heading {
+      font-size: 50px;
+    }
+  }
+
+  @media (min-width: 62em) {
+    .featurette-heading {
+      margin-top: 7rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #navbarCollapse ul {
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    div[class^='doctorInfoForSmallScreen'], div[class*=' doctorInfoForSmallScreen']{
+      display: none;
+    }
+  }
+
+  @media (max-width: 990px) {
+    .bg_image {
+      background-position: 60% 70%;
+    }
+  }
+
+  @media (max-width: 1160px) {
+    #main_menu_center {
+      width: 900px;
+    }
+
+    div.navbar-bottom {
+      margin-top: 20px;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .bg_text {
+      font-size: 30px;
+      top: 52%;
+      left: 2%;
+    }
+    #bg_text1 {
+      top: 75%;
+      left: 10%;
+      max-width: 100%;
+    }
+    #main_menu_center li a {
+      font-size: 0.9em;
+    }
+    ul.account-menu-list li a {
+      font-size: 0.9em;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    #doctorInfoForSmallScreen {
+      display: block;
+    }
+    #relatedDoctorInfos {
+      display: none;
+    }   
+    div.myc-available-time-for-one-doctor .list-group-item {
+      border: none;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    div#doctor_card div.col-md-4 {
+      text-align: left;
+    }
+    div#doctor_card div.col-md-8 {
+      text-align: left;
+    }
+    div#doctor_card div.card-body {
+      padding: 0;
+      margin-left: 10px;
+    }
+    a.expiredTime {
+      padding: 1px 7px;
+    }
+    a.inActiveTimeButton img {
+      width: 42px!important;
+    }
+    .myc-available-time-for-one-doctor a {
+      width: 52px;
+      height: 30px;
+    }
+    a.inActiveTimeButton {
+      margin-bottom: 15px;
+    }
+    a.myc-available-time {
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar-bottom {
+      justify-content: center;
+    }
+    .navbar {
+      padding-right: 0px;
+    }
+    ul.contact-information {
+      flex-direction: column;
+    }
+    ul.contact-information li {
+      margin-bottom: 5px;
+    }
+    .navbar-top {
+      margin-bottom: 0;
+    }
+    #main_menu_center {
+      width: auto;
+      transform: none;
+      left: 50%;
+      position: relative;
+    }
+    .account-menu-items {
+      align-items: flex-start;
+    }    
+    .card-img {
+      width: 50%;
+    }
+    #main_menu_center li a {
+      font-size: 1em;
+    }
+    ul.account-menu-list li a {
+      font-size: 1em;
+    }
+    #social_media_icon_container {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 868px) {
+    .bg_text {
+      font-size: 30px;
+      top: 52%;
+      left: 2%;
+    }
+    #bg_text1 {
+      top: 75%;
+      left: 10%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 550px) {
+    ul.contact-information {
+      font-size: 0.8em;
+    }
+    .logo_text {
+      font-size: 0.8em;
+    }
+    .navbar-brand img {
+      width: 60px!important;
+    }
+    .logo_text {
+      display: block;
+      margin-left: 5px;
+    }
+    .navbar-bottom {
+      order: -1;
+      justify-content: flex-end;
+    }
+    .navbar-top {
+      flex-direction: row;
+      justify-content: center;
+    }
+    ul.contact-information {
+      flex-direction: column;
+      margin-left: 0px;
+      padding-left: 0px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    ul.contact-information li {
+      margin-top: 10px;
+      text-align: center;
+      margin-bottom: 5px;
+      margin-right: 0px;
+      margin-left: 0px;
+    }
+    .navbar-toggler-icon {
+      width: 1.1em;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .bg_image {
+      background-position: 65% 70%;
+    }
+    .bg_text {
+      font-size: 25px;
+    }
+  }
+
+  @media (max-width: 476px) {
+    .myc-available-time-for-one-doctor a {
+      width: 43px;
+      height: 30px;
+    }
+    a.expiredTime {
+      padding: 1px 3px;
+    }
+    a.inActiveTimeButton {
+      padding: 1px 2px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .bg_image {
+      background-position: 70% 70%;
+    }
+    .bg_text {
+      font-size: 25px;
+    }
+    .myc-available-time-for-one-doctor a {
+      width: 40px;
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 376px) {
+    .myc-available-time-for-one-doctor a {
+      font-size: 1em;
+      width: 35px;
+      height: 25px;
+    }
+    a.expiredTime {
+      padding: 1px 1px;
+    }
+    a.inActiveTimeButton {
+      padding: 1px 0px;
+    }
+    #bg_text1 {
+      top: 75%;
+      left: 10%;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .myc-available-time-for-one-doctor a {
+      font-size: 1em;
+      width: 35px;
+      height: 25px;
+    }
+    a.expiredTime {
+      padding: 1px 1px;
+    }
+    a.inActiveTimeButton {
+      padding: 1px 0px;
+    }
+    .bg-image-1 {
+      background-position: 90% 50%;
+    }
+  }
+
