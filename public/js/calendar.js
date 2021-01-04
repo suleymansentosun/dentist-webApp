@@ -78,8 +78,8 @@
 
         // kuhanin at ipakita ang mga araw
         this.getDatesHeader = function() {
-            let currentUrl = window.location.href;
-            let languageOfSite = currentUrl.slice(20, 22);
+            urlSegments = window.location.pathname.split("/");
+            languageOfSite = urlSegments[1];
             var tmp = ``;
             for (i = 0; i < 7; i++) {
                 var d = settings.startDate.addDays(i);

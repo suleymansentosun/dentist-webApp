@@ -66,15 +66,22 @@ class FinalizeBookingController extends Controller
                 if ($request->input($booking->id) == 'yes') {
                     $booking->is_finalized = true;
                     $booking->is_materialized = true;
-                    $booking->patient->is_certain = true;
                     $booking->save();
                     $booking->patient->save();
                 } elseif ($request->input($booking->id) == 'no') {
                     $booking->is_finalized = true;
                     $booking->is_materialized = false;
-                    array_push($toBeDeletedPatients, $booking->patient);
-                    $booking->patient_id = null;
-                    $booking->save();
+                    $activeBookingOfPatient = DB::table('bookings')
+                    ->where('patient_id', '=', $booking->patient_id)
+                    ->where(function ($query) {
+                        $query->where('is_materialized', '!=', false)
+                                ->orWhereNull('is_materialized');
+                    })->get();
+                    if ($activeBookingOfPatient->isEmpty()) {
+                        array_push($toBeDeletedPatients, $booking->patient);
+                        $booking->patient_id = null;
+                        $booking->save();
+                    }
                 } 
             }
     

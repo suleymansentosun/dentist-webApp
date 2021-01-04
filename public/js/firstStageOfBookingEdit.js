@@ -186,7 +186,7 @@ function makeNotAvailableTimesInactive() {
             time.className = 'expiredTime';
             time.innerHTML = languageOfSite == 'tr' ? 'Geçti' : 'Past';
             let previousTime = time.previousElementSibling;
-            while(previousTime) {
+            while(previousTime && previousTime.tagName == 'A') {
                 previousTime.className = 'expiredTime';
                 previousTime.innerHTML = languageOfSite == 'tr' ? 'Geçti' : 'Past';
                 previousTime = previousTime.previousElementSibling;

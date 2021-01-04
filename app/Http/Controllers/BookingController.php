@@ -242,22 +242,43 @@ class BookingController extends Controller
      * @param  \App\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Booking $booking, Request $request)
+    public function destroy($lang, Booking $booking, Request $request)
     {
         $response = Gate::inspect('delete', $booking);
 
         if (auth()->user()->can('delete', $booking)) {
             $bookingPatient = $booking->patient;
             $booking->delete();
-            $activeBookingOfPatient = Booking::where('is_materialized', '!=', false)->orWhereNull('is_materialized')
-            ->where('patient_id', $booking->patient_id)->get();
+            // $activeBookingOfPatient = Booking::where('is_materialized', '!=', false)->orWhereNull('is_materialized')
+            // ->where('patient_id', $booking->patient_id)->get();
+            $activeBookingOfPatient = DB::table('bookings')
+                                        ->where('patient_id', '=', $booking->patient_id)
+                                        ->where(function ($query) {
+                                            $query->where('is_materialized', '!=', false)
+                                                    ->orWhereNull('is_materialized');
+                                        })->get();
+
+            $activeBookingOfUser = DB::table('bookings')
+                                        ->where('user_id', '=', $booking->user_id)
+                                        ->where(function ($query) {
+                                            $query->where('is_materialized', '!=', false)
+                                                    ->orWhereNull('is_materialized');
+                                        })->get();
+
+            // dd($activeBookingOfPatient);
             
             if ($activeBookingOfPatient->isEmpty()) {
                 $bookingPatient->delete();
                 $bookingPatient->users()->detach();
                 $bookingPatient->doctors()->detach();
             }
-            return redirect()->action('BookingController@index', ['locale' => App::getLocale()]);
+
+            if ($activeBookingOfUser->isEmpty()) {
+                $user = User::find($booking->user_id);
+                $user->roles()->detach(2);
+            }
+        
+            return redirect()->route('home', ['locale' => App::getLocale()]);
         } else {
             echo $response->message();
         }

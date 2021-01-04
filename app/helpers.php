@@ -83,7 +83,7 @@ function getHtmlTooltip($bookingCollection, $date) {
         $time = $booking->booking_date->format('H:i:s');
         $patientName = $booking->patient->name;
         $patientSurname = $booking->patient->surname;
-        $bookingReason = $booking->bookingReason->name;
+        $bookingReason = $plainPath == 'tr' ? $booking->bookingReason->name : $booking->bookingReason->nameEn;
         $output .= "<tr><td>$time</td><td>$patientName</td><td>$patientSurname</td><td>$bookingReason</td>";
     }
 

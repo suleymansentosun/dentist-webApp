@@ -76,7 +76,13 @@
                     @endif                    
                 </td>
                 <td>{{ date('F d, Y', strtotime($booking->created_at)) }}</td>
-                <td>{{ $booking->user->name }}</td>
+                <td>                    
+                    @if (app()->getLocale() == 'tr')                     
+                        {{$booking->user->name ?? 'Kullanıcı kaydı silinmiştir.'}}
+                    @else 
+                        {{$booking->user->name ?? 'User account was deleted.'}}
+                    @endif
+                </td>
                 <td>{{ $booking->notes }}</td>
                 <td class="actions">
                     <a
@@ -95,7 +101,7 @@
                     method="POST">
                         @method('DELETE')
                         @csrf
-                        <button type="submit" class="btn btn-link" title="Delete" value="DELETE">
+                        <button type="submit" class="btn btn-link" title="Delete" value="DELETE" style="padding:0px;">
                             {{__('Sil')}}
                         </button>
                     </form>

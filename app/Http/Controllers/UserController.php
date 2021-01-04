@@ -123,7 +123,7 @@ class UserController extends Controller
             $user->doctor()->delete();
             $user->delete();
             
-            if ($loggedInUser->hasRole('Admin')) {
+            if (auth()->user()->hasRole('Admin')) {
                 return redirect()->action('UserController@index', ['locale' => App::getLocale()]);
             } else {
                 return redirect('/home');
