@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use App\Booking;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\URL;
 
 function calculateAverageCountOfPatients($basedDate, $timeUnit, $numberToBeAveraged) {    
     switch ($timeUnit) {
@@ -67,11 +68,16 @@ function calculatePercentage($numeratorNumber, $denumeratorNumber) {
 }
 
 function getHtmlTooltip($bookingCollection, $date) {
+    $plainPath = request()->segment(1);
+    
     $date = $date->format('d/m/y');
     $bookingCount = count($bookingCollection);
     $output = "<h4>$date</h4>";
-    $output .= "<h4>Toplam Hasta Sayısı: $bookingCount</h4>";
-    $output .= "<table style='width:375px;'><tr><th>Randevu Saati</th><th>Hasta Adı</th><th>Hasta Soyadı</th><th>Randevu Gerekçesi</th></tr>";
+    $output .= $plainPath == 'tr' ? "<h4>Toplam Hasta Sayısı: $bookingCount</h4>" : 
+    "<h4>Total Patient Count: $bookingCount</h4>";
+    $output .= $plainPath == 'tr' ? 
+    "<table style='width:375px;'><tr><th>Randevu Saati</th><th>Hasta Adı</th><th>Hasta Soyadı</th><th>Randevu Gerekçesi</th></tr>"
+    : "<table style='width:375px;'><tr><th>Booking Time</th><th>Patient Name</th><th>Patient Surname</th><th>Booking Reason</th></tr>";
 
     foreach ($bookingCollection as $booking) {
         $time = $booking->booking_date->format('H:i:s');

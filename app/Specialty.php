@@ -8,6 +8,7 @@ class Specialty extends Model
 {
     protected $fillable = [
         'name',
+        'nameEn',
     ];
 
     public function doctors()

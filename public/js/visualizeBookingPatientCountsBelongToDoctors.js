@@ -1,26 +1,49 @@
 google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback(drawMultSeries);
+currentUrl = window.location.href;
+languageOfSite = currentUrl.slice(20, 22);
 
 var chart;
 
 function drawMultSeries() {
     $.ajax({
-        url: "/getBookingPatientCountsBelongToDoctorsLastTwentyWeeks",
+        url: `/${languageOfSite}/getBookingPatientCountsBelongToDoctorsLastTwentyWeeks`,
         dataType: "json",
         success: function(bookingPatientCountsBelongToDoctors) {
-          bookingPatientCountsBelongToDoctors.unshift(['Doktor', 'Randevu Sayısı', 'Hasta Sayısı']);
-
+          switch (languageOfSite) {
+            case 'tr':
+              bookingPatientCountsBelongToDoctors.unshift(['Doktor', 'Randevu Sayısı', 'Hasta Sayısı']);
+              break;
+            case 'en':
+              bookingPatientCountsBelongToDoctors.unshift(['Doctor', 'Booking Count', 'Patient Count']);
+              break;
+            default:
+              bookingPatientCountsBelongToDoctors.unshift(['Doctor', 'Booking Count', 'Patient Count']);
+        }
+          
           var data = google.visualization.arrayToDataTable(bookingPatientCountsBelongToDoctors);
 
           var options = {
-            title: 'Doktorların Baktıkları Randevu ve Hasta Sayıları (İşe Başladıkları Tarihten İtibaren)',
+            title: languageOfSite == 'tr' ? 
+            'Doktorların Baktıkları Randevu ve Hasta Sayıları (20 Haftalık)'
+            : languageOfSite == 'en' ? 
+            'The number of patients treated by doctors and the number of appointments they had (Based on 20 weeks)' : 
+            'The number of patients treated by doctors and the number of appointments they had (Based on 20 weeks)',
             chartArea: {width: '50%'},
             hAxis: {
-              title: 'Toplam Sayı',
+              title: languageOfSite == 'tr' ? 
+              'Toplam Sayı'
+              : languageOfSite == 'en' ? 
+              'Total Count' : 
+              'Total Count',
               minValue: 0,
             },
             vAxis: {
-              title: 'Doktor Adı'
+              title: languageOfSite == 'tr' ? 
+              'Doktor Adı'
+              : languageOfSite == 'en' ? 
+              'Doctor Name' : 
+              'Doctor Name',
             }
           };
 
@@ -34,7 +57,7 @@ $(document).ready(function() {
   $("#weeklyData_btn").on("click", function() {
       $("#bookingPatientCountsBelongToDoctors").show();
       $.ajax({
-        url: "/getBookingPatientCountsBelongToDoctorsLastTwentyWeeks",
+        url: `/${languageOfSite}/getBookingPatientCountsBelongToDoctorsLastTwentyWeeks`,
         dataType: "json",
         success: function(bookingPatientCountsBelongToDoctors) {
           bookingPatientCountsBelongToDoctors.unshift(['Doktor', 'Randevu Sayısı', 'Hasta Sayısı']);
@@ -45,11 +68,19 @@ $(document).ready(function() {
             title: 'Doktorların Baktıkları Randevu ve Hasta Sayıları (İşe Başladıkları Tarihten İtibaren)',
             chartArea: {width: '50%'},
             hAxis: {
-              title: 'Toplam Sayı',
+              title: languageOfSite == 'tr' ? 
+              'Toplam Sayı'
+              : languageOfSite == 'en' ? 
+              'Total Count' : 
+              'Total Count',
               minValue: 0,
             },
             vAxis: {
-              title: 'Doktor Adı'
+              title: languageOfSite == 'tr' ? 
+              'Doktor Adı'
+              : languageOfSite == 'en' ? 
+              'Doctor Name' : 
+              'Doctor Name',
             }
           };
 
@@ -64,43 +95,6 @@ $(document).ready(function() {
   });
 
   $("#monthlyData_btn").on("click", function() {
-      $("#bookingPatientCountsBelongToDoctors").show();
-      $.ajax({
-          url: "/getMonthlyBookingDatas",
-          dataType: "json",
-          success: function(bookingCountPerMonth) {
-              var data = new google.visualization.DataTable();
-              data.addColumn('date', 'Tarih');
-              data.addColumn('number', 'Randevu Sayısı');
-              data.addColumn('number', 'Ortalama Randevu Sayısı');
-  
-              bookingCountPerMonth = bookingCountPerMonth.map((item) => {
-                  item = [new Date(item[0]), item[1], item[2]];
-                  return item;
-              });
-
-              data.addRows(bookingCountPerMonth);
-
-              // Set chart options
-              var options = {
-                  'title':'Randevu Sayısı',
-                  'width':1000,
-                  'height':300,
-                  hAxis: {
-                      title: 'Tarih',
-                      format: 'd/MM/Y',
-                      titleTextStyle: {
-                          color: '#0000',
-                          bold: true,
-                      },
-                      slantedText: true,
-                  },
-              };
-          
-              // Instantiate and draw our chart, passing in some options.
-              chart = new google.visualization.LineChart(document.getElementById('daily_booking_datas'));
-              chart.draw(data, options);
-          },
-      });        
+    $("#bookingPatientCountsBelongToDoctors").hide();
   });
 });

@@ -7,6 +7,8 @@ use App\User;
 use App\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App;
+use Illuminate\Support\Facades\Gate;
 
 class DoctorController extends Controller
 {
@@ -18,9 +20,15 @@ class DoctorController extends Controller
 
     public function index()
     {
-        $doctors = doctor::paginate(10);
-        return view('doctors.index')
-            ->with('doctors', $doctors);
+        $response = Gate::inspect('viewAny', Doctor::class);
+
+        if (auth()->user()->can('viewAny', Doctor::class)) {
+            $doctors = doctor::paginate(10);
+            return view('doctors.index')
+                ->with('doctors', $doctors);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -30,13 +38,19 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        $users = user::all()->pluck('name', 'id')->prepend('Seçili Değil');
-        $specialties = specialty::all()->pluck('name', 'id')->prepend('Bir veya birden fazla seçim yapınız');
+        $response = Gate::inspect('create', Doctor::class);
 
-        return view('doctors.create')
-            ->with('doctor', (new Doctor()))          
-            ->with('users', $users)
-            ->with('specialties', $specialties);
+        if (auth()->user()->can('create', Doctor::class)) {
+            $users = user::all()->pluck('name', 'id')->prepend('Seçili Değil');
+            $specialties = specialty::all()->pluck('name', 'id')->prepend('Bir veya birden fazla seçim yapınız');
+    
+            return view('doctors.create')
+                ->with('doctor', (new Doctor()))          
+                ->with('users', $users)
+                ->with('specialties', $specialties);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -47,41 +61,47 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        $doctor = new Doctor();
+        $response = Gate::inspect('create', Doctor::class);
 
-        $doctor->name = $request->input('name');
-        $doctor->surname = $request->input('surname');
-        $doctor->graduation_date = $request->input('graduation_date');
-        $doctor->starting_date_employement = $request->input('starting_date_employement');
-        $doctor->salary = $request->input('salary');
+        if (auth()->user()->can('create', Doctor::class)) {
+            $doctor = new Doctor();
 
-        if ($request->hasFile('profile_picture')) {
-            if ($request->file('profile_picture')->isValid()) {
-                $validatedData = $request->validate([
-                    'profile_picture' => ['dimensions:min_width=100,min_height=200','mimes:jpeg, bmp, png', 'max:512']
-                ]);
-                $extension = $request->file('profile_picture')->extension();
-                $fileName = time() . '.' . $extension;
-                $request->file('profile_picture')->storeAs(
-                    'public', $fileName
-                );
+            $doctor->name = $request->input('name');
+            $doctor->surname = $request->input('surname');
+            $doctor->graduation_date = $request->input('graduation_date');
+            $doctor->starting_date_employement = $request->input('starting_date_employement');
+            $doctor->salary = $request->input('salary');
+    
+            if ($request->hasFile('profile_picture')) {
+                if ($request->file('profile_picture')->isValid()) {
+                    $validatedData = $request->validate([
+                        'profile_picture' => ['dimensions:min_width=100,min_height=200','mimes:jpeg, bmp, png', 'max:512']
+                    ]);
+                    $extension = $request->file('profile_picture')->extension();
+                    $fileName = time() . '.' . $extension;
+                    $request->file('profile_picture')->storeAs(
+                        'public', $fileName
+                    );
+                }
+            } else {
+                abort(500, 'Resim yüklenemedi.');
             }
+    
+            $doctor->profile_picture = $fileName;
+            $doctor->save();
+    
+    
+            foreach ($request->input('specialties') as $specialty) {
+                $doctor->specialties()->attach($specialty);
+            }
+    
+            $user = User::find($request->input('user_id'));
+            $user->roles()->attach(4);
+    
+            return redirect()->action('DoctorController@index', ['locale' => App::getLocale()]);
         } else {
-            abort(500, 'Resim yüklenemedi.');
+            echo $response->message();
         }
-
-        $doctor->profile_picture = $fileName;
-        $doctor->save();
-
-
-        foreach ($request->input('specialties') as $specialty) {
-            $doctor->specialties()->attach($specialty);
-        }
-
-        $user = User::find($request->input('user_id'));
-        $user->roles()->attach(4);
-
-        return redirect()->action('DoctorController@index');
     }
 
     /**
@@ -90,9 +110,15 @@ class DoctorController extends Controller
      * @param  \App\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function show(Doctor $doctor)
+    public function show($lang, Doctor $doctor)
     {
-        return view('doctors.show', ['doctor' => $doctor]);
+        $response = Gate::inspect('view', Doctor::class);
+
+        if (auth()->user()->can('view', Doctor::class)) {
+            return view('doctors.show', ['doctor' => $doctor]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -101,24 +127,30 @@ class DoctorController extends Controller
      * @param  \App\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Doctor $doctor)
+    public function edit($lang, Doctor $doctor)
     {        
-        $users = user::all()->pluck('name', 'id')->prepend('Seçili Değil');
-        $specialties = specialty::all()->pluck('name', 'id')->prepend('Bir veya birden fazla seçim yapınız');
-        $doctor_specialtyIds = array();
+        $response = Gate::inspect('update', Doctor::class);
 
-        foreach($doctor->specialties as $specialty) {
-            array_push($doctor_specialtyIds, $specialty->pivot->specialty_id); 
+        if (auth()->user()->can('update', Doctor::class)) {
+            $users = user::all()->pluck('name', 'id')->prepend('Seçili Değil');
+            $specialties = specialty::all()->pluck('name', 'id')->prepend('Bir veya birden fazla seçim yapınız');
+            $doctor_specialtyIds = array();
+    
+            foreach($doctor->specialties as $specialty) {
+                array_push($doctor_specialtyIds, $specialty->pivot->specialty_id); 
+            }
+    
+            return view('doctors.edit')            
+                ->with('users', $users)
+                ->with('specialties', $specialties)
+                ->with('doctor', $doctor)
+                ->with('doctor_specialtyIds', $doctor_specialtyIds);
+        } else {
+            echo $response->message();
         }
-
-        return view('doctors.edit')            
-            ->with('users', $users)
-            ->with('specialties', $specialties)
-            ->with('doctor', $doctor)
-            ->with('doctor_specialtyIds', $doctor_specialtyIds);
     }
 
-    public function updatePivotTable($pivotTableName, $filterColumnName, $filterValue, $request, $fieldName, $dataToBeUpdated) {
+    public function updatePivotTable($lang, $pivotTableName, $filterColumnName, $filterValue, $request, $fieldName, $dataToBeUpdated) {
         $pvtTbleRelatedRowIds = array();
         $pvtTbleArrOfRelatedRowObjs = DB::table($pivotTableName)->where($filterColumnName, '=', $filterValue)->get();
         foreach($pvtTbleArrOfRelatedRowObjs as $index => $rowObj) {
@@ -152,41 +184,47 @@ class DoctorController extends Controller
      * @param  \App\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update($lang, Request $request, Doctor $doctor)
     {
-        $doctor->name = $request->input('name');
-        $doctor->surname = $request->input('surname');
-        $doctor->graduation_date = $request->input('graduation_date');
-        $doctor->starting_date_employement = $request->input('starting_date_employement');
-        $doctor->salary = $request->input('salary');
+        $response = Gate::inspect('update', Doctor::class);
 
-        if ($request->hasFile('profile_picture')) {
-            if ($request->file('profile_picture')->isValid()) {
-                $validatedData = $request->validate([
-                    'profile_picture' => 'mimes:jpeg,jpg,png,gif|max:512'
-                ]);
-                $extension = $request->file('profile_picture')->extension();
-                $fileName = time() . '.' . $extension;
-                $request->file('profile_picture')->storeAs(
-                    'public', $fileName
-                );
+        if (auth()->user()->can('update', Doctor::class)) {
+            $doctor->name = $request->input('name');
+            $doctor->surname = $request->input('surname');
+            $doctor->graduation_date = $request->input('graduation_date');
+            $doctor->starting_date_employement = $request->input('starting_date_employement');
+            $doctor->salary = $request->input('salary');
+    
+            if ($request->hasFile('profile_picture')) {
+                if ($request->file('profile_picture')->isValid()) {
+                    $validatedData = $request->validate([
+                        'profile_picture' => 'mimes:jpeg,jpg,png,gif|max:512'
+                    ]);
+                    $extension = $request->file('profile_picture')->extension();
+                    $fileName = time() . '.' . $extension;
+                    $request->file('profile_picture')->storeAs(
+                        'public', $fileName
+                    );
+                }
+            } else {
+                abort(500, 'Resim yüklenemedi.');
             }
+    
+            $doctor->profile_picture = $fileName;
+            $doctor->save();
+    
+            $newDoctorSpecialtyIds = array();
+    
+            foreach($request->input('specialties') as $specialty_id) {
+                array_push($newDoctorSpecialtyIds, $specialty_id);
+            }
+    
+            $doctor->specialties()->sync($newDoctorSpecialtyIds);
+    
+            return redirect()->action('DoctorController@index', ['locale' => App::getLocale()]);
         } else {
-            abort(500, 'Resim yüklenemedi.');
+            echo $response->message();
         }
-
-        $doctor->profile_picture = $fileName;
-        $doctor->save();
-
-        $newDoctorSpecialtyIds = array();
-
-        foreach($request->input('specialties') as $specialty_id) {
-            array_push($newDoctorSpecialtyIds, $specialty_id);
-        }
-
-        $doctor->specialties()->sync($newDoctorSpecialtyIds);
-
-        return redirect()->action('DoctorController@index');
     }
 
     /**
@@ -195,11 +233,17 @@ class DoctorController extends Controller
      * @param  \App\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Doctor $doctor)
+    public function destroy($lang, Doctor $doctor)
     {
-        $doctor->specialties()->detach();
-        $doctor->delete();
-        
-        return redirect()->action('DoctorController@index');
+        $response = Gate::inspect('delete', Doctor::class);
+
+        if (auth()->user()->can('delete', Doctor::class)) {
+            $doctor->specialties()->detach();
+            $doctor->delete();
+            
+            return redirect()->action('DoctorController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 }

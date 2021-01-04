@@ -2,93 +2,7 @@
 
 @section('rightNavbarLinks')
     <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{{ asset('dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{{ asset('dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{{ asset('dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge" id="notification_bell"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header" id="notification_header"></span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary custom-modal w-100" data-toggle="modal" data-target="#exampleModal">
-                <i class="fas fa-users mr-2"></i> <span id="spesific_notification"></span>
-            </button>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
+      <!-- Messages Dropdown Menu -->      
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
@@ -106,26 +20,26 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item">
-              <a href="{{ action('Patient\PatientDashboardController@showDashboard')}}" class="nav-link">
+              <a href="{{ action('Patient\PatientDashboardController@showDashboard', app()->getLocale())}}" class="nav-link">
                 <p>
-                  Randevularım
+                  {{__('Randevularım')}}
                 </p>
                   </a>
             </li>
             <li class="nav-item">
               <a href="https://adminlte.io/docs/3.0" class="nav-link">
                 <i class="nav-icon fas fa-file"></i>
-                <p>Rehber</p>
+                <p>{{__('Rehber')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('logout') }}"
+              <a class="nav-link" href="{{ route('logout', app()->getLocale()) }}"
                 onclick="event.preventDefault();
                 document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
               </a>
 
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
                       @csrf
               </form>
             </li>
@@ -142,17 +56,17 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Doktor Adı</th>
-            <th>Hasta Adı</th>
-            <th>Hasta Soyadı</th>
-            <th>Randevu Tarihi</th>
-            <th>Hasta Şikayeti</th>
-            <th>Randevu Gerçekleşti mi?</th>
-            <th>Randevu Saati Geçti mi?</th>
-            <th>Randevu Oluşturulma Tarihi</th>
-            <th>Randevuyu Oluşturan Kullanıcı</th>
-            <th>Randevu ile ilgili ekstra notlar</th>
-            <th class="Actions">Actions</th>
+            <th>{{__('Doktor Adı')}}</th>
+            <th>{{__('Hasta Adı')}}</th>
+            <th>{{__('Hasta Soyadı')}}</th>
+            <th>{{__('Randevu Tarihi')}}</th>
+            <th>{{__('Hasta Şikayeti')}}</th>
+            <th>{{__('Randevu Gerçekleşti mi?')}}</th>
+            <th>{{__('Randevu Saati Geçti mi?')}}</th>
+            <th>{{__('Randevu Oluşturulma Tarihi')}}</th>
+            <th>{{__('Randevuyu Oluşturan Kullanıcı')}}</th>
+            <th>{{__('Randevu ile ilgili ekstra notlar')}}</th>
+            <th class="Actions">{{__('İşlemler')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -160,36 +74,70 @@
             <tr>
                 <td>{{ $booking->id }}</td>
                 <td>{{ $booking->doctor->name .' '. $booking->doctor->surname }}</td>
-                <td>{{ $booking->patient->name ?? 'Hasta kaydı randevuya gelmediği için silinmiştir.'}}</td>
-                <td>{{ $booking->patient->surname ?? 'Hasta kaydı randevuya gelmediği için silinmiştir.'}}</td>
+                <td>  
+                    @if (isset($booking->patient->name))
+                        {{$booking->patient->name}}
+                    @elseif (app()->getLocale() == 'tr')
+                        'Hasta kaydı randevuya gelmediği için silinmiştir.'
+                    @else
+                        'The patient record was deleted because he did not came to the booking'
+                    @endif
+                </td>
+                <td>                    
+                    @if (isset($booking->patient->surname))
+                        {{$booking->patient->surname}}
+                    @elseif (app()->getLocale() == 'tr')
+                        'Hasta kaydı randevuya gelmediği için silinmiştir.'
+                    @else
+                        'The patient record was deleted because he did not came to the booking'
+                    @endif
+                </td>
                 <td>{{ date('Y-m-d H:i:s', strtotime($booking->booking_date)) }}</td>
-                <td>{{ $booking->bookingReason->name }}</td>
-                <td>{{ $booking->is_materialized ? 'Evet' : 'Hayır' }}</td>
-                <td>{{ (strtotime($booking->booking_date) < time()) ? 'Evet' : 'Hayır' }}</td>
+                <td>                    
+                    @if (app()->getLocale() == 'tr')
+                        {{$booking->bookingReason->name}}
+                    @else
+                        {{$booking->bookingReason->nameEn}}
+                    @endif
+                </td>
+                <td>                    
+                    @if (app()->getLocale() == 'tr')                     
+                        {{$booking->is_materialized ? 'Evet' : 'Hayır'}}
+                    @else 
+                        {{$booking->is_materialized ? 'Yes' : 'No'}}
+                    @endif
+                </td>
+                <td>                    
+                    @if (app()->getLocale() == 'tr')                     
+                        {{(strtotime($booking->booking_date) < time()) ? 'Evet' : 'Hayır'}}
+                    @else 
+                        {{(strtotime($booking->booking_date) < time()) ? 'Yes' : 'No'}}
+                    @endif   
+                </td>
                 <td>{{ date('F d, Y', strtotime($booking->created_at)) }}</td>
                 <td>{{ $booking->user->name }}</td>
                 <td>{{ $booking->notes }}</td>
                 <td class="actions" style="text-align:center;">
                     <a
                         style="text"
-                        href="{{ action('BookingController@show', ['booking' => $booking->id]) }}"
+                        href="{{ action('BookingController@show', ['locale' => app()->getLocale(), 'booking' => $booking->id]) }}"
                         alt="View"
                         title="View">
-                      View
+                      {{__('View')}}
                     </a>
                     <a
                         style="display:{{ (strtotime($booking->booking_date) < time()) ? 'none' : 'default' }}"
-                        href="{{ action('BookingController@edit', ['booking' => $booking->id]) }}"
+                        href="{{ action('BookingController@edit', ['locale' => app()->getLocale(), 'booking' => $booking->id]) }}"
                         alt="Edit"
                         title="Edit">
-                      Edit
+                      {{__('Edit')}}
                     </a>
-                    <form action="{{ action('BookingController@destroy', ['booking' => $booking->id]) }}"
+                    <form action="{{ action('BookingController@destroy', ['locale' => app()->getLocale(), 'booking' => $booking->id]) }}"
                     method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-link" title="Delete" value="DELETE">
-                            Delete
+                            {{__('Delete')}}
                         </button>
                     </form>
                 </td>

@@ -38,7 +38,7 @@
                         <p>{{ __('Kolay randevu ve tedavi takip uygulamamızdan faydalanabilmek için lütfen kaydolun.') }}</p>
                     </div>
                         <div class="card-body">
-                            <form method="POST" action="{{ route('register') }}">
+                            <form method="POST" action="{{ route('register', app()->getLocale()) }}">
                                 @csrf
 
                                 <div class="form-group row">
@@ -74,11 +74,11 @@
 
                                     <div class="col-md-6">
                                         <select id="instrumentalInFind" name="instrumentalInFind" class="form-control @error('instrumentalInFind') is-invalid @enderror" required>
-                                            <option selected="true" value="directive" class="disabled" disabled="disabled">Seçilmedi</option>
-                                            <option value="web_search">Web Araması</option>
-                                            <option value="advice">Tavsiye</option>
-                                            <option value="location">Komşu (Yer Yakınlığı)</option>
-                                            <option value="social_media">Sosyal Medya</option>
+                                            <option selected="true" value="directive" class="disabled" disabled="disabled">{{__('Seçilmedi')}}</option>
+                                            <option value="web_search">{{__('Web Araması')}}</option>
+                                            <option value="advice">{{__('Tavsiye')}}</option>
+                                            <option value="location">{{__('Yer Yakınlığı')}}</option>
+                                            <option value="social_media">{{__('Sosyal Medya')}}</option>
                                         </select>
 
                                         @error('phone')

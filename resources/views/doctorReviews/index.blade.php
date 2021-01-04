@@ -28,18 +28,18 @@
                 <td>{{ date('F d, Y', strtotime($booking->created_at)) }}</td>
                 <td class="actions">
                     <a
-                        href="{{ action('BookingController@show', ['booking' => $booking->id]) }}"
+                        href="{{ action('BookingController@show', ['locale' => app()->getLocale(), 'booking' => $booking->id]) }}"
                         alt="View"
                         title="View">
                       View
                     </a>
                     <a
-                        href="{{ action('BookingController@edit', ['booking' => $booking->id]) }}"
+                        href="{{ action('BookingController@edit', ['locale' => app()->getLocale(), 'booking' => $booking->id]) }}"
                         alt="Edit"
                         title="Edit">
                       Edit
                     </a>
-                    <form action="{{ action('DoctorReviewController@edit') }}">
+                    <form action="{{ action('DoctorReviewController@edit', ['locale' => app()->getLocale()]) }}">
                         <input name="is_approved" type="checkbox" class="form-check-input" value="1" {{ $doctorReview->approve ? 'checked' : '' }}/> 
                         <label class="form-check-label" for="is_approved">Onayla</label>
                     </form>

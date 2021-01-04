@@ -10,10 +10,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Kullanıcı Adı</th>
-            <th>Rolü</th>
-            <th>E-Mail Adresi</th>
-            <th class="Actions">Actions</th>
+            <th>{{__('Kullanıcı Adı')}}</th>
+            <th>{{__('Kullanıcı Rolü')}}</th>
+            <th>{{__('Email Adresi')}}</th>
+            <th class="Actions">{{__('İşlemler')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -28,22 +28,16 @@
                 <td>{{ $user->email }}</td>
                 <td class="actions">
                     <a
-                        href="{{ action('UserController@show', ['user' => $user->id]) }}"
+                        href="{{ action('UserController@show', ['locale' => app()->getLocale(), 'user' => $user->id]) }}"
                         alt="View"
                         title="View">
-                      Gör
+                      {{__('Gör')}}
                     </a>
-                    <a
-                        href="{{ action('UserController@edit', ['user' => $user->id]) }}"
-                        alt="Edit"
-                        title="Edit">
-                      Düzenle
-                    </a>
-                    <form action="{{ action('UserController@destroy', ['user' => $user->id]) }}" method="POST">
+                    <form style="display:inline-block;" action="{{ action('UserController@destroy', ['locale' => app()->getLocale(), 'user' => $user->id]) }}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-link" title="Delete" value="SİL">
-                            Sil
+                            {{__('Sil')}}
                         </button>
                     </form>
                 </td>

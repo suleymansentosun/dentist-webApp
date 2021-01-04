@@ -30,7 +30,7 @@
 
   </head>
 
-  <body>
+  <body onresize="setBackgroundImageSize()">
     <header>
       <nav class="navbar navbar-expand-md navbar-light" id="navbar">
         <div class="navbar-top">
@@ -44,8 +44,25 @@
              <li>
                <a href="tel:+2163057759" class="call-button">
                <img src="{{ asset('\dist\img\telephone.svg') }}" alt="" style="width:20px; height:auto; margin-right:7px;">
-                 <span class="contact_info" id="call_btn">Bizi Arayın! (216 305-7759)</span>
+                 <span class="contact_info" id="call_btn">{{__('Bizi Arayın!')}} 216-305-7759</span>
                </a>
+             </li>
+             <li>
+                <div class="dropdown">
+                  <button class="btn btn-language dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-globe"></i>
+
+                  </button>
+                  <div class="dropdown-menu" id="language_menu" aria-labelledby="dropdownMenuButton">                    
+                      @foreach (config('app.available_locales') as $locale)
+                          <a class="dropdown-item" id="language_menu_item" 
+                            href="{{ route('welcome', $locale) }}">
+                            <img src="{{ asset('/dist/img/' . $locale . '.svg') }}" alt="" style="width:30px;">
+                          </a>                                                
+                      @endforeach
+                  </div>
+                </div>
+             </li> 
              </li>
           </ul>
         </div>
@@ -66,10 +83,10 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ __('Tedaviler') }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="#">Diş Ağrısı</a>
-                      <a class="dropdown-item" href="#">Diş Estetiği</a>
-                      <a class="dropdown-item" href="#">Diş Bakımı</a>
-                      <a class="dropdown-item" href="#">Eksik Diş</a>
+                      <a class="dropdown-item" href="#">{{__('Diş Ağrısı')}}</a>
+                      <a class="dropdown-item" href="#">{{__('Diş Estetiği')}}</a>
+                      <a class="dropdown-item" href="#">{{__('Diş Bakımı')}}</a>
+                      <a class="dropdown-item" href="#">{{__('Eksik Diş')}}</a>
                     </div>
                   </div>
               </li>
@@ -88,11 +105,11 @@
                     <div class="account-menu-items">
                       <ul class="account-menu-list">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Giriş') }}</a>
+                            <a class="nav-link" href="{{ route('login', app()->getLocale()) }}">{{ __('Giriş') }}</a>
                         </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Kayıt') }}</a>
+                                <a class="nav-link" href="{{ route('register', app()->getLocale()) }}">{{ __('Kayıt') }}</a>
                             </li>
                         @endif                    
                       </ul>
@@ -101,31 +118,31 @@
                     <div class="account-menu-items">
                       <ul class="account-menu-list">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}"
+                            <a class="nav-link" href="{{ route('logout', app()->getLocale()) }}"
                                 onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                                 {{ __('Hesaptan Çık') }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </li>
                         @if (Auth::user()->hasRole('Admin'))
                           <li class="nav-item">
-                            <a class="nav-link" href="{{ action('Admin\ShowDashboard') }}">Kontrol Paneli</a>
+                            <a class="nav-link" href="{{ action('Admin\ShowDashboard@showDashboard', ['locale' => app()->getLocale()]) }}">{{__('Kontrol Paneli')}}</a>
                           </li>
                         @elseif (Auth::user()->hasRole('Doctor'))
                           <li class="nav-item">
-                              <a class="nav-link" href="{{ action('Doctor\DoctorDashboardController@showDashboard') }}">Kontrol Paneli</a>
+                              <a class="nav-link" href="{{ action('Doctor\DoctorDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}">{{__('Kontrol Paneli')}}</a>
                           </li>
                         @elseif (Auth::user()->hasRole('Employee'))
                           <li class="nav-item">
-                              <a class="nav-link" href="{{ action('Employee\EmployeeDashboardController@showDashboard') }}">Kontrol Paneli</a>
+                              <a class="nav-link" href="{{ action('Employee\EmployeeDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}">{{__('Kontrol Paneli')}}</a>
                           </li>
                         @elseif (Auth::user()->hasRole('Patient'))
                           <li class="nav-item">
-                              <a class="nav-link" href="{{ action('Patient\PatientDashboardController@showDashboard') }}">Kontrol Paneli</a>
+                              <a class="nav-link" href="{{ action('Patient\PatientDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}">{{__('Kontrol Paneli')}}</a>
                           </li>
                       </ul>
                     </div>
@@ -161,7 +178,7 @@
             <div class="col text-center">
               @section('create_booking_btn')
                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#firstStageBooking" 
-                id="create_booking_btn">Randevu Ayarla</button>
+                id="create_booking_btn">{{ __('Randevu Ayarla') }}</button>
               @show
             </div>
           </div>
@@ -180,11 +197,11 @@
               </div>
               <div class="modal-body container" id="firstStageBookingBody">
                   <div class="row" id="modal_instructor">
-                      <div class="col"><strong>Randevu nedeninizi belirterek ilgili doktorları ve müsait oldukları saatleri inceleyin, uygun bir saat seçerek randevu oluşturun.</strong></div>
+                      <div class="col"><strong>{{__('Randevu nedeninizi belirterek ilgili doktorları ve müsait oldukları saatleri inceleyin, uygun bir saat seçerek randevu oluşturun.')}}</strong></div>
                   </div>
                   <div class="row" id="container_selectBookingReason">
                       <select class="custom-select mt-2" id="select_bookingReasons_form">
-
+   
                       </select>
                   </div>    
                   <div class="row">
@@ -221,8 +238,8 @@
           </a>
         </li>
       </ul>
-      <p class="float-right"><a href="#">Başa Dön</a></p>
-      <p>&copy; Copyright © 2020 Dent Cappadocia Ağız ve Diş Sağlığı Polikliniği. Tüm Hakları Saklıdır. &middot; <a href="#">Gizlilik</a> &middot; <a href="#">Şartlar</a></p>
+      <p class="float-right"><a href="#">{{__('Başa Dön')}}</a></p>
+      <p>&copy; {{__('Copyright © 2020 Dent Cappadocia Ağız ve Diş Sağlığı Polikliniği. Tüm Hakları Saklıdır.')}} &middot; <a href="#">{{__('Gizlilik')}}</a> &middot; <a href="#">{{__('Şartlar')}}</a></p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -252,6 +269,7 @@
     <script src="/js/calendar.js"></script>
     @section('scripts')
       <script src="/js/firstStageOfBooking.js"></script>
+      <script src="/js/validate.js"></script>
     @show    
   </body>
 </html>

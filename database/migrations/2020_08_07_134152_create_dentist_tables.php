@@ -19,6 +19,7 @@ class CreateDentistTables extends Migration
             Schema::dropIfExists('bookingReasons');
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->string('nameEn', 255);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -42,7 +43,7 @@ class CreateDentistTables extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             Schema::dropIfExists('bookings');
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->unsignedBigInteger('bookingReason_id');
             $table->unsignedBigInteger('doctor_id');
@@ -57,7 +58,7 @@ class CreateDentistTables extends Migration
 
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('set null');
             $table->foreign('doctor_id')->references('id')->on('doctors');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('bookingReason_id')->references('id')->on('bookingReasons');
         });
 
@@ -86,6 +87,7 @@ class CreateDentistTables extends Migration
             Schema::dropIfExists('specialties');
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->string('nameEn', 255);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -114,12 +116,12 @@ class CreateDentistTables extends Migration
         Schema::create('user_patient', function (Blueprint $table) {
             Schema::dropIfExists('user_patient');
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('patient_id');
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
 
         Schema::create('doctor_patient', function (Blueprint $table) {

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use App;
 
 class isEmployee
 {
@@ -19,7 +20,7 @@ class isEmployee
         if (Auth::check() && $request->user()->hasRole('Employee')) {
             return $next($request);
         } else {
-            return redirect('home');
+            return redirect('/' . App::getLocale() . '/home');
         }
     }
 }

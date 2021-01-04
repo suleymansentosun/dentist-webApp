@@ -5,11 +5,13 @@ let doctorInfos;
 let relatedDoctorsListElement = document.getElementById('relatedDoctorInfos');
 let availableBookingsForRelatedDoctors = [];
 let doctorIds = [];
+let currentUrl = window.location.href;
+let languageOfSite = currentUrl.slice(20, 22);
 
 function getAllBookingReasons() {
     let xhr = new XMLHttpRequest();
 
-    xhr.open("GET", '/getAllBookingReasonsForFirstStageOfBooking');
+    xhr.open("GET", `/${languageOfSite}` + '/getAllBookingReasonsForFirstStageOfBooking');
 
     xhr.responseType = 'json';
 
@@ -40,7 +42,7 @@ function getRelatedDoctorInfos(selectedBookingReasonId, doctorIdToBeViewedAtTheT
     }
     let xhr = new XMLHttpRequest();
 
-    xhr.open("GET", `/getRelatedDoctorInfos/${selectedBookingReasonId}/${doctorIdToBeViewedAtTheTop}`);
+    xhr.open("GET", `/${languageOfSite}/getRelatedDoctorInfos/${selectedBookingReasonId}/${doctorIdToBeViewedAtTheTop}`);
 
     xhr.responseType = 'json';
 
@@ -51,19 +53,39 @@ function getRelatedDoctorInfos(selectedBookingReasonId, doctorIdToBeViewedAtTheT
     xhr.onload = function() {
         relatedDoctorsListElement.innerHTML = '';
         doctorInfos = xhr.response;
-        if (currentDatesOnBookingCalendar.length != 0) {
+        if (currentDatesOnBookingCalendar.length != 0 && languageOfSite == 'tr') {
             doctorInfos.forEach(item => {            
                 relatedDoctorsListElement.insertAdjacentHTML("beforeend",`
                     <li class="list-group-item">
                         <div class="card" id="doctor_card" style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                    <img src="${urlStorageFile}${item.profile_picture}" class="card-img" alt="Doktor ${item.name} ${item.surname}">
+                                    <img src="${urlStorageFile}${item.profile_picture}" class="card-img" alt="Dr. ${item.name} ${item.surname}">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                    <h5 class="card-title" style="color:#375272; font-weight:600;"><strength>Doktor ${item.name} ${item.surname}</strength></h5>
+                                    <h5 class="card-title" style="color:#375272; font-weight:600;"><strength>Dr. ${item.name} ${item.surname}</strength></h5>
                                     <p class="card-text"><span style="color:#375272; font-weight:600;">Uzmanlık Alanları: </span>${item.specialties}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `);
+            });
+        } else {
+            doctorInfos.forEach(item => {            
+                relatedDoctorsListElement.insertAdjacentHTML("beforeend",`
+                    <li class="list-group-item">
+                        <div class="card" id="doctor_card" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="${urlStorageFile}${item.profile_picture}" class="card-img" alt="Dr. ${item.name} ${item.surname}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                    <h5 class="card-title" style="color:#375272; font-weight:600;"><strength>Dr. ${item.name} ${item.surname}</strength></h5>
+                                    <p class="card-text"><span style="color:#375272; font-weight:600;">Specialties: </span>${item.specialties}</p>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +117,7 @@ function getAvailableBookingsForRelatedDoctors(doctorInfos, currentDatesOnBookin
     let jsonCurrentDatesOnBookingCalendar = JSON.stringify(currentDatesOnBookingCalendar);
 
 
-    xhr.open("GET", `/getAvailableBookingsForRelatedDoctors/${jsonDoctorIds}/${jsonCurrentDatesOnBookingCalendar}`);
+    xhr.open("GET", `/${languageOfSite}/getAvailableBookingsForRelatedDoctors/${jsonDoctorIds}/${jsonCurrentDatesOnBookingCalendar}`);
 
     xhr.responseType = 'json';
 
@@ -162,11 +184,11 @@ function makeNotAvailableTimesInactive() {
             time.innerHTML = `<img style="width:55px;" src="${urlSvg}"></img>`;
         } else if (+new Date(time.getAttribute('data-date') + ' ' + time.getAttribute('data-time')) < +currentDateAndMonth) {
             time.className = 'expiredTime';
-            time.innerHTML = 'Geçti';
+            time.innerHTML = languageOfSite == 'tr' ? 'Geçti' : 'Past';
             let previousTime = time.previousElementSibling;
             while(previousTime) {
                 previousTime.className = 'expiredTime';
-                previousTime.innerHTML = 'Geçti';
+                previousTime.innerHTML = languageOfSite == 'tr' ? 'Geçti' : 'Past';
                 previousTime = previousTime.previousElementSibling;
             }
         }

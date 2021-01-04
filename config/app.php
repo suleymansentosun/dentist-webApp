@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'tr',
 
     /*
     |--------------------------------------------------------------------------
@@ -229,4 +229,8 @@ return [
         'DateAndDataMatcher' => App\Helpers\DateAndDataMatcher::class,
     ],
 
+    'available_locales' => [
+        'tr',
+        'en',
+    ],
 ];

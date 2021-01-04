@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\BookingReason;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App;
+use Illuminate\Support\Facades\Gate;
 
 class BookingReasonController extends Controller
 {
@@ -14,10 +16,16 @@ class BookingReasonController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $bookingReasons = BookingReason::paginate(10);
-        return view('bookingReasons.index')
-            ->with('bookingReasons', $bookingReasons);
+    {        
+        $response = Gate::inspect('viewAny', BookingReason::class);
+
+        if (auth()->user()->can('viewAny', BookingReason::class)) {
+            $bookingReasons = BookingReason::paginate(10);
+            return view('bookingReasons.index')
+                ->with('bookingReasons', $bookingReasons);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -27,8 +35,14 @@ class BookingReasonController extends Controller
      */
     public function create()
     {
-        return view('bookingReasons.create')
+        $response = Gate::inspect('create', BookingReason::class);
+
+        if (auth()->user()->can('create', BookingReason::class)) {
+            return view('bookingReasons.create')
             ->with('bookingReason', (new BookingReason()));
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -39,11 +53,14 @@ class BookingReasonController extends Controller
      */
     public function store(Request $request)
     {
-        // DB::table('booking_reasons')->insert([
-        //     'name' => $request->input('bookingReason')
-        // ]);
-        $bookingReason = BookingReason::create($request->input());
-        return redirect()->action('BookingReasonController@index');
+        $response = Gate::inspect('create', BookingReason::class);
+
+        if (auth()->user()->can('create', BookingReason::class)) {
+            $bookingReason = BookingReason::create($request->input());
+            return redirect()->action('BookingReasonController@index',  ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -52,7 +69,7 @@ class BookingReasonController extends Controller
      * @param  \App\BookingReason  $bookingReason
      * @return \Illuminate\Http\Response
      */
-    public function show(BookingReason $bookingReason)
+    public function show($lang, BookingReason $bookingReason)
     {
         //
     }
@@ -63,10 +80,16 @@ class BookingReasonController extends Controller
      * @param  \App\BookingReason  $bookingReason
      * @return \Illuminate\Http\Response
      */
-    public function edit(BookingReason $bookingReason)
+    public function edit($lang, BookingReason $bookingReason)
     {
-        return view('bookingReasons.edit')
+        $response = Gate::inspect('update', BookingReason::class);
+
+        if (auth()->user()->can('update', BookingReason::class)) {
+            return view('bookingReasons.edit')
             ->with('bookingReason', $bookingReason);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -76,11 +99,17 @@ class BookingReasonController extends Controller
      * @param  \App\BookingReason  $bookingReason
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BookingReason $bookingReason)
+    public function update($lang, Request $request, BookingReason $bookingReason)
     {
-        $bookingReason->fill($request->input());
-        $bookingReason->save();
-        return redirect()->action('BookingReasonController@index');
+        $response = Gate::inspect('update', BookingReason::class);
+
+        if (auth()->user()->can('update', BookingReason::class)) {
+            $bookingReason->fill($request->input());
+            $bookingReason->save();
+            return redirect()->action('BookingReasonController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -89,9 +118,15 @@ class BookingReasonController extends Controller
      * @param  \App\BookingReason  $bookingReason
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BookingReason $bookingReason)
+    public function destroy($lang, BookingReason $bookingReason)
     {
-        $bookingReason->delete();
-        return redirect()->action('BookingReasonController@index');
+        $response = Gate::inspect('delete', BookingReason::class);
+
+        if (auth()->user()->can('delete', BookingReason::class)) {
+            $bookingReason->delete();
+            return redirect()->action('BookingReasonController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 }

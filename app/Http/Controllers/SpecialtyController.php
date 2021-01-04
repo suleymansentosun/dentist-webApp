@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App;
+use Illuminate\Support\Facades\Gate;
 
 class SpecialtyController extends Controller
 {
@@ -15,10 +17,16 @@ class SpecialtyController extends Controller
      */
     public function index()
     {
-        $specialties = specialty::paginate(10);
+        $response = Gate::inspect('viewAny', Specialty::class);
 
-        return view('specialties.index')
-            ->with('specialties', $specialties);
+        if (auth()->user()->can('viewAny', Specialty::class)) {
+            $specialties = specialty::paginate(10);
+
+            return view('specialties.index')
+                ->with('specialties', $specialties);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -28,8 +36,14 @@ class SpecialtyController extends Controller
      */
     public function create()
     {
-        return view('specialties.create')
+        $response = Gate::inspect('create', Specialty::class);
+
+        if (auth()->user()->can('create', Specialty::class)) {
+            return view('specialties.create')
             ->with('specialty', (new Specialty()));
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -40,9 +54,15 @@ class SpecialtyController extends Controller
      */
     public function store(Request $request)
     {
-        $specialty = specialty::create($request->all());
+        $response = Gate::inspect('create', Specialty::class);
 
-        return redirect()->action('SpecialtyController@index');
+        if (auth()->user()->can('create', Specialty::class)) {
+            $specialty = specialty::create($request->all());
+
+            return redirect()->action('SpecialtyController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -51,7 +71,7 @@ class SpecialtyController extends Controller
      * @param  \App\doctorSpecialty  $doctorSpecialty
      * @return \Illuminate\Http\Response
      */
-    public function show(doctorSpecialty $doctorSpecialty)
+    public function show($lang, doctorSpecialty $doctorSpecialty)
     {
         //
     }
@@ -62,10 +82,16 @@ class SpecialtyController extends Controller
      * @param  \App\doctorSpecialty  $doctorSpecialty
      * @return \Illuminate\Http\Response
      */
-    public function edit(specialty $specialty)
+    public function edit($lang, specialty $specialty)
     {
-        return view('specialties.edit')
-        ->with('specialty', $specialty);
+        $response = Gate::inspect('update', Specialty::class);
+
+        if (auth()->user()->can('update', Specialty::class)) {
+            return view('specialties.edit')
+            ->with('specialty', $specialty);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -75,11 +101,17 @@ class SpecialtyController extends Controller
      * @param  \App\doctorSpecialty  $doctorSpecialty
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, specialty $specialty)
+    public function update($lang, Request $request, specialty $specialty)
     {
-        $specialty->update($request->input());
+        $response = Gate::inspect('update', Specialty::class);
 
-        return redirect()->action('SpecialtyController@index');
+        if (auth()->user()->can('update', Specialty::class)) {
+            $specialty->update($request->input());
+
+            return redirect()->action('SpecialtyController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -88,9 +120,15 @@ class SpecialtyController extends Controller
      * @param  \App\doctorSpecialty  $doctorSpecialty
      * @return \Illuminate\Http\Response
      */
-    public function destroy(specialty $specialty)
+    public function destroy($lang, specialty $specialty)
     {
-        $specialty->delete();
-        return redirect()->action('SpecialtyController@index');
+        $response = Gate::inspect('delete', Specialty::class);
+
+        if (auth()->user()->can('delete', Specialty::class)) {
+            $specialty->delete();
+            return redirect()->action('SpecialtyController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 }

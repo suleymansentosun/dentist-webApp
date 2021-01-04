@@ -75,7 +75,7 @@ class PatientController extends Controller
      * @param  \App\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Patient $patient)
+    public function update($lang, Request $request, Patient $patient)
     {
         //
     }
@@ -86,7 +86,7 @@ class PatientController extends Controller
      * @param  \App\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Patient $patient)
+    public function destroy($lang, Patient $patient)
     {
     }
 }

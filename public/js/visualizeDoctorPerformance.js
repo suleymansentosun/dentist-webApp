@@ -1,22 +1,48 @@
 google.charts.load("current", {packages:['bar']});
 google.charts.setOnLoadCallback(drawChart);
+currentUrl = window.location.href;
+languageOfSite = currentUrl.slice(20, 22);
 
 var chart;
 
 function drawChart() {
     $.ajax({
-        url: "/getWeeklyDoctorsBookingCounts",
+        url: `/${languageOfSite}/getWeeklyDoctorsBookingCounts`,
         dataType: "json",
         success: function(doctorsBookingCounts) {
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Tarih');
-            data.addColumn('number', 'Reggie Zboncak');
-            data.addColumn('number', 'Benton Marks');
-            data.addColumn('number', 'Devin Terry');
-            data.addColumn('number', 'Jackson Glover');
-            data.addColumn('number', 'Ena Jacobs');
-            data.addColumn('number', 'Ilene Haag');
-            data.addColumn('number', 'Vince Beahan');
+            switch (languageOfSite) {
+                case 'tr':
+                  data.addColumn('date', 'Tarih');
+                  data.addColumn('number', 'Reggie Zboncak');
+                  data.addColumn('number', 'Benton Marks');
+                  data.addColumn('number', 'Devin Terry');
+                  data.addColumn('number', 'Jackson Glover');
+                  data.addColumn('number', 'Ena Jacobs');
+                  data.addColumn('number', 'Ilene Haag');
+                  data.addColumn('number', 'Vince Beahan');
+                  break;
+                case 'en':
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Reggie Zboncak');
+                  data.addColumn('number', 'Benton Marks');
+                  data.addColumn('number', 'Devin Terry');
+                  data.addColumn('number', 'Jackson Glover');
+                  data.addColumn('number', 'Ena Jacobs');
+                  data.addColumn('number', 'Ilene Haag');
+                  data.addColumn('number', 'Vince Beahan');
+                  break;
+                default:
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Reggie Zboncak');
+                  data.addColumn('number', 'Benton Marks');
+                  data.addColumn('number', 'Devin Terry');
+                  data.addColumn('number', 'Jackson Glover');
+                  data.addColumn('number', 'Ena Jacobs');
+                  data.addColumn('number', 'Ilene Haag');
+                  data.addColumn('number', 'Vince Beahan');
+                  break;
+            }
 
             doctorsBookingCounts = doctorsBookingCounts.map((item) => {
                 item = [new Date(item[0]), {v: item[1][0], f: `${item[1][1]} (${item[1][0]}%)`}, 
@@ -34,7 +60,10 @@ function drawChart() {
 
             // Set chart options
             var options = {
-                title: 'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Haftalık Seyir)',
+                title: languageOfSite == 'tr' ? 
+                'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Haftalık Seyir)' 
+                : languageOfSite == 'en' ? 
+                'Distribution of appointments between doctors (Weekly Period)' : 'Distribution of appointments between doctors (Weekly Period)',
                 titleTextStyle: {
                     color: 'black',
                     fontSize: 14,
@@ -81,18 +110,42 @@ $(document).ready(function() {
     $("#weeklyData_btn").on("click", function() {
         $("#doctorsBookingCounts").show();
         $.ajax({
-            url: "/getWeeklyDoctorsBookingCounts",
+            url: `/${languageOfSite}/getWeeklyDoctorsBookingCounts`,
             dataType: "json",
             success: function(doctorsBookingCounts) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Reggie Zboncak');
-                data.addColumn('number', 'Benton Marks');
-                data.addColumn('number', 'Devin Terry');
-                data.addColumn('number', 'Jackson Glover');
-                data.addColumn('number', 'Ena Jacobs');
-                data.addColumn('number', 'Ilene Haag');
-                data.addColumn('number', 'Vince Beahan');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                }
     
                 doctorsBookingCounts = doctorsBookingCounts.map((item) => {
                     item = [new Date(item[0]), {v: item[1][0], f: `${item[1][1]} (${item[1][0]}%)`}, 
@@ -110,7 +163,10 @@ $(document).ready(function() {
     
                 // Set chart options
                 var options = {
-                    title: 'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Haftalık Seyir)',
+                    title: languageOfSite == 'tr' ? 
+                    'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Haftalık Seyir)' 
+                    : languageOfSite == 'en' ? 
+                    'Distribution of appointments between doctors (Weekly Period)' : 'Distribution of appointments between doctors (Weekly Period)',
                     titleTextStyle: {
                         color: 'black',
                         fontSize: 14,
@@ -159,18 +215,42 @@ $(document).ready(function() {
 
     $("#monthlyData_btn").on("click", function() {
         $.ajax({
-            url: "/getMonthlyDoctorsBookingCounts",
+            url: `/${languageOfSite}/getMonthlyDoctorsBookingCounts`,
             dataType: "json",
             success: function(doctorsBookingCounts) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Reggie Zboncak');
-                data.addColumn('number', 'Benton Marks');
-                data.addColumn('number', 'Devin Terry');
-                data.addColumn('number', 'Jackson Glover');
-                data.addColumn('number', 'Ena Jacobs');
-                data.addColumn('number', 'Ilene Haag');
-                data.addColumn('number', 'Vince Beahan');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Reggie Zboncak');
+                      data.addColumn('number', 'Benton Marks');
+                      data.addColumn('number', 'Devin Terry');
+                      data.addColumn('number', 'Jackson Glover');
+                      data.addColumn('number', 'Ena Jacobs');
+                      data.addColumn('number', 'Ilene Haag');
+                      data.addColumn('number', 'Vince Beahan');
+                      break;
+                }
     
                 doctorsBookingCounts = doctorsBookingCounts.map((item) => {
                     item = [new Date(item[0]), {v: item[1][0], f: `${item[1][1]} (${item[1][0]}%)`}, 
@@ -188,7 +268,10 @@ $(document).ready(function() {
     
                 // Set chart options
                 var options = {
-                    title: 'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Aylık Seyir)',
+                    title: languageOfSite == 'tr' ? 
+                    'Gerçekleşen Randevuların Doktorlar Arasındaki Dağılımı (Aylık Seyir)' 
+                    : languageOfSite == 'en' ? 
+                    'Distribution of appointments between doctors (Monthly Period)' : 'Distribution of appointments between doctors (Monthly Period)',
                     titleTextStyle: {
                         color: 'black',
                         fontSize: 14,

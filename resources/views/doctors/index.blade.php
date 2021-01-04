@@ -1,11 +1,17 @@
 @extends('layouts.admin')
 
 @section('buttons')
-<a class="btn btn-primary" href="{{ route('doctors.create') }}" role="button">Doktor Ekle</a>
+<a class="btn btn-primary" href="{{ route('doctors.create', app()->getLocale()) }}" role="button">Doktor Ekle</a>
 @endsection
 
 @section('sidebar')
 @parent
+    <a
+        href="{{ action('DoctorController@create', ['locale' => app()->getLocale()]) }}"
+        alt="Create"
+        title="Create">
+        {{__('Yeni Doktor Oluştur')}}
+    </a>
     </div>
 </aside>
 @endsection
@@ -14,13 +20,13 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Adı</th>
-            <th>Soyadı</th>
-            <th>Meslekte Geçirdiği Süre(Yıl)</th>
-            <th>Kliniğimizde Geçirdiği Süre(Yıl)</th>
-            <th>Maaşı</th>
-            <th>Bu Kaydın Oluşturulma Tarihi</th>
-            <th class="Actions">Actions</th>
+            <th>{{__('İsim')}}</th>
+            <th>{{__('Soyisim')}}</th>
+            <th>{{__('Yıl Olarak Meslekte Geçirdiği Süre')}}</th>
+            <th>{{__('Yıl Olarak Kliniğimizde Geçirdiği Süre')}}</th>
+            <th>{{__('Maaş')}}</th>
+            <th>{{__('Bu Kaydın Oluşturulma Tarihi')}}</th>
+            <th class="Actions">{{__('İşlemler')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -34,22 +40,22 @@
                 <td>{{ date('F d, Y', strtotime($doctor->created_at)) }}</td>
                 <td class="actions">
                     <a
-                        href="{{ action('DoctorController@show', ['doctor' => $doctor->id]) }}"
+                        href="{{ action('DoctorController@show', ['locale' => app()->getLocale(), 'doctor' => $doctor->id]) }}"
                         alt="View"
                         title="View">
-                      İncele
+                      {{__('İncele')}}
                     </a>
                     <a
-                        href="{{ action('DoctorController@edit', ['doctor' => $doctor->id]) }}"
+                        href="{{ action('DoctorController@edit', ['locale' => app()->getLocale(), 'doctor' => $doctor->id]) }}"
                         alt="Edit"
                         title="Edit">
-                      Düzenle
+                      {{__('Düzenle')}}
                     </a>
-                    <form action="{{ action('DoctorController@destroy', ['doctor' => $doctor->id]) }}" method="POST">
+                    <form action="{{ action('DoctorController@destroy', ['locale' => app()->getLocale(), 'doctor' => $doctor->id]) }}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-link" title="Delete" value="SİL">
-                            Sil
+                            {{__('Sil')}}
                         </button>
                     </form>
                 </td>

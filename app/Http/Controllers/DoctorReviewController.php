@@ -66,7 +66,7 @@ class DoctorReviewController extends Controller
      * @param  \App\DoctorReview  $doctorReview
      * @return \Illuminate\Http\Response
      */
-    public function show(DoctorReview $doctorReview)
+    public function show($lang, DoctorReview $doctorReview)
     {
         //
     }
@@ -77,7 +77,7 @@ class DoctorReviewController extends Controller
      * @param  \App\DoctorReview  $doctorReview
      * @return \Illuminate\Http\Response
      */
-    public function edit(DoctorReview $doctorReview)
+    public function edit($lang, DoctorReview $doctorReview)
     {
         //
     }
@@ -89,7 +89,7 @@ class DoctorReviewController extends Controller
      * @param  \App\DoctorReview  $doctorReview
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DoctorReview $doctorReview)
+    public function update($lang, Request $request, DoctorReview $doctorReview)
     {
         //
     }
@@ -100,7 +100,7 @@ class DoctorReviewController extends Controller
      * @param  \App\DoctorReview  $doctorReview
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DoctorReview $doctorReview)
+    public function destroy($lang, DoctorReview $doctorReview)
     {
         //
     }

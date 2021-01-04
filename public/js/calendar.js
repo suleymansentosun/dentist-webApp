@@ -78,12 +78,19 @@
 
         // kuhanin at ipakita ang mga araw
         this.getDatesHeader = function() {
+            let currentUrl = window.location.href;
+            let languageOfSite = currentUrl.slice(20, 22);
             var tmp = ``;
             for (i = 0; i < 7; i++) {
                 var d = settings.startDate.addDays(i);
-                var monthNames = ["Ock", "Şbt", "Mrt", "Nis", "May", "Haz",
-                "Tem", "Ağst", "Eyl", "Ekm", "Kas", "Arlk"
-                ];
+                if (languageOfSite == 'tr') {
+                    var monthNames = ["Ock", "Şbt", "Mrt", "Nis", "May", "Haz",
+                    "Tem", "Ağst", "Eyl", "Ekm", "Kas", "Arlk"
+                    ];
+                } else {
+                    var monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+                }
+
                 tmp += `
                     <div class="myc-date-header" id="myc-date-header-` + i + `">
                         <div class="myc-date-number">` + settings.weekdays[d.getDay()] + `</div>

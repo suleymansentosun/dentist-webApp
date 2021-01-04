@@ -12,10 +12,6 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <span class="dropdown-item dropdown-header" id="notification_header"></span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
             <!-- Button trigger modal -->
@@ -24,12 +20,7 @@
             </button>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
       <li class="nav-item">
@@ -48,37 +39,37 @@
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
           <li class="nav-item">
-              <a href="{{ route('dashboard') }}" class="nav-link active">
+              <a href="{{ route('dashboard', app()->getLocale()) }}" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Gösterge Paneli
+                {{__('Gösterge Paneli')}}
               </p>
               </a>
           </li>          
-          <li class="nav-header">İÇERİK KONTROLÜ</li>
+          <li class="nav-header">{{__('İÇERİK KONTROLÜ')}}</li>
 
           <li class="nav-item">
-            <a href="{{ action('BookingController@index')}}" class="nav-link">
+            <a href="{{ action('BookingController@index', ['locale' => app()->getLocale()])}}" class="nav-link">
               <p>
-                Randevular
+                {{__('Randevular')}}
               </p>
             </a>
           </li>
-          <li class="nav-header">ÇEŞİTLİ</li>
+          <li class="nav-header">{{__('ÇEŞİTLİ')}}</li>
           <li class="nav-item">
             <a href="https://adminlte.io/docs/3.0" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
-              <p>Rehber</p>
+              <p>{{__('Rehber')}}</p>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('logout') }}"
+            <a class="nav-link" href="{{ route('logout', app()->getLocale()) }}"
             onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">
-            {{ __('Logout') }}
+            {{ __('Çıkış') }}
             </a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
                 @csrf
             </form>
           </li>
@@ -110,13 +101,13 @@
             <div class="small-box bg-info">
               <div class="inner">
                 <h3>{{ count($bookings) }}</h3>
-                <p>Bugünkü Randevular</p>
+                <p>{{__('Bugünkü Randevular')}}</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="{{ action('Employee\EmployeeDashboardController@getTodaysBookings') }}"
-              class="small-box-footer">Randevuları Gör<i class="fas fa-arrow-circle-right ml-1"></i></a>
+              <a href="{{ action('Employee\EmployeeDashboardController@getTodaysBookings', ['locale' => app()->getLocale()]) }}"
+              class="small-box-footer">{{__('Randevuları Gör')}}<i class="fas fa-arrow-circle-right ml-1"></i></a>
             </div>
           </div>
         </div>
@@ -130,26 +121,26 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Randevu Takip Onay Formu</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{__('Randevu Takip Onay Formu')}}</h5>
             <div class="form-check ml-auto">
               <input class="form-check-input" type="checkbox" value="" id="selectAll">
               <label class="form-check-label" for="selectAll">
-                Tümünü Seç
+                {{__('Tümünü Seç')}}
               </label>
             </div>
             <button type="button" class="close" id="getOut_notification" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form action="{{ action('FinalizeBookingController@finalizeAndUpdateBooking') }}" method="POST">
+          <form action="{{ action('FinalizeBookingController@finalizeAndUpdateBooking', ['locale' => app()->getLocale()]) }}" method="POST">
             @method('PUT')
             @csrf
             <div class="modal-body" id="check_booking_materialized">
               
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="exit_notification">İptal</button>
-              <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="exit_notification">{{__('İptal')}}</button>
+              <button type="submit" class="btn btn-primary">{{__('Değişiklikleri Kaydet')}}</button>
             </div>
           </form>
         </div>

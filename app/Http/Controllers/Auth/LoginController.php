@@ -35,19 +35,19 @@ class LoginController extends Controller
 
         switch ($role) {
             case 'Admin':
-                    return '/dashboard';
+                    return app()->getLocale() . '/dashboard';
                 break;
             case 'Doctor':
-                    return '/doctorDashboard';
+                    return app()->getLocale() . '/doctorDashboard';
                 break;
             case 'Employee':
-                    return '/employeeDashboard';
+                    return app()->getLocale() . '/employeeDashboard';
                 break;
             case 'Patient':
-                    return '/patientDashboard';
+                    return app()->getLocale() . '/patientDashboard';
                 break;
             default:
-                    return '/login'; 
+                    return app()->getLocale() . '/login'; 
                 break;
         }
     }

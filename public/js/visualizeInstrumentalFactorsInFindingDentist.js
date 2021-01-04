@@ -1,19 +1,37 @@
 google.charts.load("current", {packages:['bar']});
 google.charts.setOnLoadCallback(drawChart);
+currentUrl = window.location.href;
+languageOfSite = currentUrl.slice(20, 22);
 
 var chart;
 
 function drawChart() {
     $.ajax({
-        url: "/getWeeklyInstrumentalFactorsInFindingDentist",
+        url: `/${languageOfSite}/getWeeklyInstrumentalFactorsInFindingDentist`,
         dataType: "json",
         success: function(instrumentalFactorCountsPerWeek) {
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Tarih');
-            data.addColumn('number', 'Web Araması');
-            data.addColumn('number', 'Tavsiye');
-            data.addColumn('number', 'Sosyal Medya');
-            data.addColumn('number', 'Yer Yakınlığı');
+            switch (languageOfSite) {
+                case 'tr':
+                  data.addColumn('date', 'Tarih');
+                  data.addColumn('number', 'Web Araması');
+                  data.addColumn('number', 'Tavsiye');
+                  data.addColumn('number', 'Sosyal Medya');
+                  data.addColumn('number', 'Yer Yakınlığı');
+                case 'en':
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Web Search');
+                  data.addColumn('number', 'Advice');
+                  data.addColumn('number', 'Social Media');
+                  data.addColumn('number', 'Neighbour');
+                  break;
+                default:
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Web Search');
+                  data.addColumn('number', 'Advice');
+                  data.addColumn('number', 'Social Media');
+                  data.addColumn('number', 'Neighbour');
+            }
 
             instrumentalFactorCountsPerWeek = instrumentalFactorCountsPerWeek.map((item) => {
                 item = [new Date(item[0]), {v: item[1][1], f: `${item[1][1]} (${item[1][0]}%)`}, {v: item[2][1], f: `${item[2][1]} (${item[2][0]}%)`}, 
@@ -28,7 +46,11 @@ function drawChart() {
 
             // Set chart options
             var options = {
-                title: 'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)',
+                title: languageOfSite == 'tr' ? 
+                'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)' 
+                : languageOfSite == 'en' ? 
+                'What are the effective factors in finding our hospital? (Distribution on a weekly basis)' : 
+                'What are the effective factors in finding our hospital? (Distribution on a weekly basis)',
                 titleTextStyle: {
                     color: 'black',
                     fontSize: 14,
@@ -72,15 +94,31 @@ $(document).ready(function() {
     $("#weeklyData_btn").on("click", function() {
         $("#instrumentalFactorsInFinding").show();
         $.ajax({
-            url: "/getWeeklyInstrumentalFactorsInFindingDentist",
+            url: `/${languageOfSite}/getWeeklyInstrumentalFactorsInFindingDentist`,
             dataType: "json",
             success: function(instrumentalFactorCountsPerWeek) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Web Araması');
-                data.addColumn('number', 'Tavsiye');
-                data.addColumn('number', 'Sosyal Medya');
-                data.addColumn('number', 'Yer Yakınlığı');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Web Araması');
+                      data.addColumn('number', 'Tavsiye');
+                      data.addColumn('number', 'Sosyal Medya');
+                      data.addColumn('number', 'Yer Yakınlığı');
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Web Search');
+                      data.addColumn('number', 'Advice');
+                      data.addColumn('number', 'Social Media');
+                      data.addColumn('number', 'Neighbour');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Web Search');
+                      data.addColumn('number', 'Advice');
+                      data.addColumn('number', 'Social Media');
+                      data.addColumn('number', 'Neighbour');
+                }
     
                 instrumentalFactorCountsPerWeek = instrumentalFactorCountsPerWeek.map((item) => {
                     item = [new Date(item[0]), {v: item[1][1], f: `${item[1][1]} (${item[1][0]}%)`}, {v: item[2][1], f: `${item[2][1]} (${item[2][0]}%)`}, 
@@ -95,7 +133,11 @@ $(document).ready(function() {
     
                 // Set chart options
                 var options = {
-                    title: 'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)',
+                    title: languageOfSite == 'tr' ? 
+                    'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)' 
+                    : languageOfSite == 'en' ? 
+                    'What are the effective factors in finding our hospital? (Distribution on a weekly basis)' : 
+                    'What are the effective factors in finding our hospital? (Distribution on a weekly basis)',
                     titleTextStyle: {
                         color: 'black',
                         fontSize: 14,
@@ -143,15 +185,31 @@ $(document).ready(function() {
 
     $("#monthlyData_btn").on("click", function() {
         $.ajax({
-            url: "/getMonthlyInstrumentalFactorsInFindingDentist",
+            url: `/${languageOfSite}/getMonthlyInstrumentalFactorsInFindingDentist`,
             dataType: "json",
             success: function(instrumentalFactorCountsPerMonth) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Web Araması');
-                data.addColumn('number', 'Tavsiye');
-                data.addColumn('number', 'Sosyal Medya');
-                data.addColumn('number', 'Yer Yakınlığı');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Web Araması');
+                      data.addColumn('number', 'Tavsiye');
+                      data.addColumn('number', 'Sosyal Medya');
+                      data.addColumn('number', 'Yer Yakınlığı');
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Web Search');
+                      data.addColumn('number', 'Advice');
+                      data.addColumn('number', 'Social Media');
+                      data.addColumn('number', 'Neighbour');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Web Search');
+                      data.addColumn('number', 'Advice');
+                      data.addColumn('number', 'Social Media');
+                      data.addColumn('number', 'Neighbour');
+                }
     
                 instrumentalFactorCountsPerMonth = instrumentalFactorCountsPerMonth.map((item) => {
                     item = [new Date(item[0]), {v: item[1][1], f: `${item[1][1]} (${item[1][0]}%)`}, {v: item[2][1], f: `${item[2][1]} (${item[2][0]}%)`}, 
@@ -166,7 +224,11 @@ $(document).ready(function() {
     
                 // Set chart options
                 var options = {
-                    title: 'Kliniğimizi Nasıl Keşfettiler (Aylık Bazda Dağılım)',
+                    title: languageOfSite == 'tr' ? 
+                    'Kliniğimizi Nasıl Keşfettiler (Aylık Bazda Dağılım)' 
+                    : languageOfSite == 'en' ? 
+                    'What are the effective factors in finding our hospital? (Distribution on a monthly basis)' : 
+                    'What are the effective factors in finding our hospital? (Distribution on a monthly basis)',
                     titleTextStyle: {
                         color: 'black',
                         fontSize: 14,

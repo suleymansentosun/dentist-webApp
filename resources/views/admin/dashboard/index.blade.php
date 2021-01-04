@@ -4,34 +4,6 @@
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->      
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge" id="notification_bell"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header" id="notification_header"></span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary custom-modal w-100" data-toggle="modal" data-target="#exampleModal">
-                <i class="fas fa-users mr-2"></i> <span id="spesific_notification"></span>
-            </button>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
@@ -46,70 +18,70 @@
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item">
-          <a href="{{ route('dashboard') }}" class="nav-link active">
+          <a href="{{ route('dashboard', app()->getLocale()) }}" class="nav-link active">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
-              Gösterge Paneli
+              {{__('Gösterge Paneli')}}
             </p>
           </a>
         </li>
-        <li class="nav-header">İÇERİK KONTROLÜ</li>
+        <li class="nav-header">{{__('İÇERİK KONTROLÜ')}}</li>
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-tree"></i>
             <p>
-              Obje Kontrolü
+              {{__('Obje Kontrolü')}}
               <i class="fas fa-angle-left right"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ action('DoctorController@index') }}" class="nav-link">
+              <a href="{{ action('DoctorController@index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Doktor Kontrolü</p>
+                <p>{{__('Doktor Kontrolü')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ action('UserController@index') }}" class="nav-link">
+              <a href="{{ action('UserController@index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Kullanıcı Kontrolü</p>
+                <p>{{__('Kullanıcı Kontrolü')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ action('BookingController@index') }}" class="nav-link">
+              <a href="{{ action('BookingController@index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Randevu Kontrolü</p>
+                <p>{{__('Randevu Kontrolü')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ action('BookingReasonController@index') }}" class="nav-link">
+              <a href="{{ action('BookingReasonController@index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Randevu Gerekçesi Kontrolü</p>
+                <p>{{__('Randevu Gerekçesi Kontrolü')}}</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ action('SpecialtyController@index') }}" class="nav-link">
+              <a href="{{ action('SpecialtyController@index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Doktor Uzmanlık Alanı Kontrolü</p>
+                <p>{{__('Doktor Uzmanlık Alanı Kontrolü')}}</p>
               </a>
             </li>
           </ul>
         </li>
-        <li class="nav-header">ÇEŞİTLİ</li>
+        <li class="nav-header">{{__('ÇEŞİTLİ')}}</li>
         <li class="nav-item">
           <a href="https://adminlte.io/docs/3.0" class="nav-link">
             <i class="nav-icon fas fa-file"></i>
-            <p>Rehber</p>
+            <p>{{__('Rehber')}}</p>
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="{{ route('logout') }}"
+        <a class="nav-link" href="{{ route('logout', app()->getLocale()) }}"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                         {{ __('Çıkış') }}
                     </a>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
                         @csrf
                     </form>
         </li>
@@ -140,13 +112,13 @@
               <div class="inner">
                 <h3>{{ count($bookings) }}</h3>
 
-                <p>Bugün Ayarlanan Randevu Sayısı</p>
+                <p>{{__('Bugün Ayarlanan Randevu Sayısı')}}</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="{{ action('BookingController@index')}}"
-              class="small-box-footer">Tüm Randevuları Gör<i class="fas fa-arrow-circle-right ml-1"></i></a>
+              <a href="{{ action('BookingController@index', ['locale' => app()->getLocale()])}}"
+              class="small-box-footer">{{__('Tüm Randevuları Gör')}}<i class="fas fa-arrow-circle-right ml-1"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -156,12 +128,12 @@
               <div class="inner">
                 <h3>{{ count($registeredPatientsForTheFirstTime) }}</h3>
 
-                <p>Bugün Kazanılan Hasta Sayısı</p>
+                <p>{{__('Bugün Kazanılan Hasta Sayısı')}}</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="{{ action('PatientController@index')}}" class="small-box-footer">Tüm Hastaları Gör<i class="fas fa-arrow-circle-right ml-1"></i></a>
+              <a href="{{ action('PatientController@index', ['locale' => app()->getLocale()])}}" class="small-box-footer">{{__('Tüm Hastaları Gör')}}<i class="fas fa-arrow-circle-right ml-1"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -171,12 +143,12 @@
               <div class="inner">
                 <h3>{{ count($users) }}</h3>
 
-                <p>Bugün Sitemize Kaydolan Kullanıcı Sayısı</p>
+                <p>{{__('Bugün Sitemize Kaydolan Kullanıcı Sayısı')}}</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="{{ action('UserController@index') }}" class="small-box-footer">Tüm Kullanıcıları Gör<i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ action('UserController@index', ['locale' => app()->getLocale()]) }}" class="small-box-footer">{{__('Tüm Kullanıcıları Gör')}}<i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -192,18 +164,18 @@
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="fas fa-chart-pie mr-1"></i>
-                  Veri Görselleri
+                  {{__('Veri Görselleri')}}
                 </h3>
                 <div class="card-tools">
                   <ul class="nav nav-pills ml-auto">
                     <li class="nav-item">
-                      <a class="nav-link" href="#revenue-chart" id="dailyData_btn" data-toggle="tab">Günlük</a>
+                      <a class="nav-link" href="#revenue-chart" id="dailyData_btn" data-toggle="tab">{{__('Günlük')}}</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="" id="weeklyData_btn" data-toggle="tab">Haftalık</a>
+                      <a class="nav-link active" href="" id="weeklyData_btn" data-toggle="tab">{{__('Haftalık')}}</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#sales-chart" id="monthlyData_btn" data-toggle="tab">Aylık</a>
+                      <a class="nav-link" href="#sales-chart" id="monthlyData_btn" data-toggle="tab">{{__('Aylık')}}</a>
                     </li>
                   </ul>
                 </div>

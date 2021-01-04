@@ -1,11 +1,17 @@
 @extends('layouts.admin')
 
 @section('buttons')
-<a class="btn btn-primary" href="{{ route('specialties.create') }}" role="button">Doktor Uzmanlık Alanı Ekle</a>
+<a class="btn btn-primary" href="{{ route('specialties.create', app()->getLocale()) }}" role="button">{{__('Doktor Uzmanlık Alanı Ekle')}}</a>
 @endsection
 
 @section('sidebar')
 @parent
+<a
+    href="{{ action('SpecialtyController@create', ['locale' => app()->getLocale()]) }}"
+    alt="Create"
+    title="Create">
+    {{__('Yeni Uzmanlık Alanı Oluştur')}}
+</a>
     </div>
 </aside>
 @endsection
@@ -15,9 +21,10 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Doktor Uzmanlık Alanı</th>
-            <th>Oluşturulma Tarihi</th>
-            <th class="Actions">Actions</th>
+            <th>{{__('Doktor Uzmanlık Alanı')}}</th>
+            <th>{{__('Doktor Uzmanlık Alanı Tercümesi')}}</th>
+            <th>{{__('Oluşturulma Tarihi')}}</th>
+            <th class="Actions">{{__('İşlemler')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -25,19 +32,20 @@
             <tr>
                 <td>{{ $specialty->id }}</td>
                 <td>{{ $specialty->name }}</td>
+                <td>{{ $specialty->nameEn }}</td>
                 <td>{{ date('F d, Y', strtotime($specialty->created_at)) }}</td>
                 <td class="actions">
                     <a
-                        href="{{ route('specialties.edit', $specialty->id) }}"
+                        href="{{ action('SpecialtyController@edit', ['locale' => app()->getLocale(), 'specialty' => $specialty->id]) }}"
                         alt="Edit"
                         title="Edit">
-                      Düzenle
+                      {{__('Düzenle')}}
                     </a>
-                    <form action="{{ route('specialties.destroy', $specialty->id) }}" method="POST">
+                    <form action="{{ action('SpecialtyController@destroy', ['locale' => app()->getLocale(), 'specialty' => $specialty->id]) }}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-link" title="Delete" value="SİL">
-                            Sil
+                            {{__('Sil')}}
                         </button>
                     </form>
                 </td>

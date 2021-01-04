@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -15,9 +17,15 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::paginate(10);
-        return view('roles.index')
-            ->with('roles', $roles);
+        $response = Gate::inspect('viewAny', Role::class);
+
+        if (auth()->user()->can('viewAny', Role::class)) {
+            $roles = Role::paginate(10);
+            return view('roles.index')
+                ->with('roles', $roles);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -27,8 +35,14 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create')
+        $response = Gate::inspect('create', Role::class);
+
+        if (auth()->user()->can('create', Role::class)) {
+            return view('roles.create')
             ->with('role', (new Role()));
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -39,8 +53,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create($request->input());
-        return redirect()->action('RoleController@index');
+        $response = Gate::inspect('create', Role::class);
+
+        if (auth()->user()->can('create', Role::class)) {
+            $role = Role::create($request->input());
+            return redirect()->action('RoleController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -49,7 +69,7 @@ class RoleController extends Controller
      * @param  \App\Role  $doctorRole
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($lang, Role $role)
     {
         //
     }
@@ -60,10 +80,16 @@ class RoleController extends Controller
      * @param  \App\Role  $doctorRole
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($lang, Role $role)
     {
-        return view('roles.edit')
-        ->with('role', $role);
+        $response = Gate::inspect('update', Role::class);
+
+        if (auth()->user()->can('update', Role::class)) {
+            return view('roles.edit')
+            ->with('role', $role);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -73,12 +99,18 @@ class RoleController extends Controller
      * @param  \App\Role  $doctorRole
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update($lang, Request $request, Role $role)
     {
-        $role->fill($request->input());
-        $role->save();
+        $response = Gate::inspect('update', Role::class);
 
-        return redirect()->action('RoleController@index');
+        if (auth()->user()->can('update', Role::class)) {
+            $role->fill($request->input());
+            $role->save();
+    
+            return redirect()->action('RoleController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -87,9 +119,15 @@ class RoleController extends Controller
      * @param  \App\Role  $doctorRole
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($lang, Role $role)
     {
-        $role->delete();
-        return redirect()->action('RoleController@index');
+        $response = Gate::inspect('delete', Role::class);
+
+        if (auth()->user()->can('delete', Role::class)) {
+            $role->delete();
+            return redirect()->action('RoleController@index', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }
     }
 }

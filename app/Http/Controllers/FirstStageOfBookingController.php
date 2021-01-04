@@ -9,25 +9,36 @@ use App\Booking;
 use App\Doctor;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\URL;
 
 class FirstStageOfBookingController extends Controller
 {
     public function returnBookingReasons()
     {
+        $currentUrl = URL::current();
+        $urlSegments = explode('/', trim($currentUrl, '/'));
+        $lang = $urlSegments[3];
+
         $bookingReasons = BookingReason::all();
 
         $bookingReasonsArray = array();
 
-        foreach($bookingReasons as $bookingReason) {
-            array_push($bookingReasonsArray, [$bookingReason->id, $bookingReason->name]);
+        foreach($bookingReasons as $bookingReason) {            
+            array_push($bookingReasonsArray, [$bookingReason->id, $lang == 'tr' ? $bookingReason->name : $bookingReason->nameEn]);
         }
 
-        array_unshift($bookingReasonsArray, [0, 'Seçiniz']);
+        if ($lang == 'tr') {
+            array_unshift($bookingReasonsArray, [0, 'Seçiniz']);
+        } else if ($lang == 'en') {
+            array_unshift($bookingReasonsArray, [0, 'Select']);
+        } else {
+            array_unshift($bookingReasonsArray, [0, 'Select']);
+        }
 
         return response()->json($bookingReasonsArray);
     }
 
-    public function returnRelatedDoctorInfos($bookingReasonId, $doctorIdToBeViewedAtTheTop)
+    public function returnRelatedDoctorInfos($lang, $bookingReasonId, $doctorIdToBeViewedAtTheTop)
     {
         switch ($bookingReasonId) {
             case 0:
@@ -38,7 +49,7 @@ class FirstStageOfBookingController extends Controller
                 break;
             case 2:
                 $doctors = Doctor::whereHas('specialties', function (Builder $query) {
-                    $query->where('name', '=', 'Estetik Diş Hekimliği');
+                    $query->where('specialties.id', '=', 2);
                 })->get();
                 break;
             case 3:
@@ -46,7 +57,7 @@ class FirstStageOfBookingController extends Controller
                 break;
             case 4:
                 $doctors = Doctor::whereHas('specialties', function (Builder $query) {
-                    $query->where('name', '=', 'İmplantoloji');
+                    $query->where('specialties.id', '=', 1);
                 })->get();
                 break;
             case 5:
@@ -56,19 +67,27 @@ class FirstStageOfBookingController extends Controller
 
         if ($doctorIdToBeViewedAtTheTop != 0) {
             $doctors = $doctors->sortBy(function ($doctor, $key) use ($doctorIdToBeViewedAtTheTop) {
-                // dd($doctorIdToBeViewedAtTheTop);
                 return abs($doctor['id'] - $doctorIdToBeViewedAtTheTop);
             });
         }
-
-        // dd($doctors);
 
         $doctorInfos = array();
 
         foreach ($doctors as $doctor) {
             $doctorSpecialties = array();
-            foreach($doctor->specialties as $specialty) {
-                array_push($doctorSpecialties, $specialty->name);
+
+            if ($lang == 'tr') {
+                foreach($doctor->specialties as $specialty) {
+                    array_push($doctorSpecialties, $specialty->name);
+                }
+            } else if ($lang == 'en') {
+                foreach($doctor->specialties as $specialty) {
+                    array_push($doctorSpecialties, $specialty->nameEn);
+                }
+            } else {
+                foreach($doctor->specialties as $specialty) {
+                    array_push($doctorSpecialties, $specialty->nameEn);
+                }
             }
 
             array_push($doctorInfos, ["name" => $doctor->name, "surname" => $doctor->surname, 
@@ -78,7 +97,7 @@ class FirstStageOfBookingController extends Controller
         return response()->json($doctorInfos);
     }
 
-    public function returnAvailableBookingsForRelatedDoctors($doctorIds, $currentDatesOnBookingCalendar)
+    public function returnAvailableBookingsForRelatedDoctors($lang, $doctorIds, $currentDatesOnBookingCalendar)
     {
         // [[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]],[[],[],[]]]
         $stateOfBookingTimesForAllDoctorsAndAllDays = [];
@@ -88,6 +107,8 @@ class FirstStageOfBookingController extends Controller
         $currentDatesOnBookingCalendar = json_decode($currentDatesOnBookingCalendar);
 
         $allBookingHoursWithinWorkingHours = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+        // dd($currentDatesOnBookingCalendar);
 
         foreach ($currentDatesOnBookingCalendar as $date) {
             foreach ($doctorIds as $doctorId) {

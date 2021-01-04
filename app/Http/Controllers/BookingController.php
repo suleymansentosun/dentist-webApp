@@ -12,6 +12,8 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App;
+use Illuminate\Support\Facades\Gate;
 
 class BookingController extends Controller
 {
@@ -23,16 +25,21 @@ class BookingController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
-
-        $this->middleware('isAdminOrEmployee')->only('index');
+        $this->middleware('auth')->only('create');
+        $this->middleware('checkBookingDateAndTime')->only(['edit', 'update']);
     }
 
     public function index()
     {
-        $bookings = Booking::paginate(10);
-        return view('bookings.index')
-            ->with('bookings', $bookings);
+        $response = Gate::inspect('viewAny', Booking::class);
+
+        if (auth()->user()->can('viewAny', Booking::class)) {
+            $bookings = Booking::paginate(10);
+            return view('bookings.index')
+                ->with('bookings', $bookings);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -40,7 +47,7 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($booking_date, $doctor_id, $bookingReason_id)
+    public function create($lang, $booking_date, $doctor_id, $bookingReason_id)
     {
         $currentUser =  Auth::user();
         $doctor = Doctor::all()->find($doctor_id);
@@ -73,10 +80,6 @@ class BookingController extends Controller
         $requestedDate = date_create($request->input('booking_date'));
         $dateNow = new DateTime('now');
 
-        if (count($currentBookingForRequestedTime) > 0 && $requestedDate < $dateNow) {
-            // error
-        }
-
         $thePatient = DB::table('patients')
                             ->where('citizenship_number', '=', $request->input('citizenship_number'))
                             ->get();
@@ -91,7 +94,7 @@ class BookingController extends Controller
             ]);
 
             $user = User::find($request->input('user_id'));
-            $user->roles()->syncWithoutDetaching(3);
+            $user->roles()->syncWithoutDetaching(2);
     
             $user->patients()->attach($patient->id);
         }
@@ -114,7 +117,7 @@ class BookingController extends Controller
 
         $booking->patient->doctors()->syncWithoutDetaching($booking->doctor_id);
 
-        return redirect('/responseToApply');
+        return redirect(App::getLocale() . '/responseToApply');
     }
 
     /**
@@ -123,17 +126,15 @@ class BookingController extends Controller
      * @param  \App\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function show(Booking $booking, Request $request)
+    public function show($lang, Booking $booking, Request $request)
     {
-        $employeeAndAdminUsers = getEmployeeUsersAndAdmin();
+        $response = Gate::inspect('view', $booking);
 
-        if (in_array($request->user()->id, $employeeAndAdminUsers) || 
-        $request->user()->id === $booking->doctor->user_id ||
-        $request->user()->id === $booking->user_id) {
+        if (auth()->user()->can('view', $booking)) {
             return view('bookings.show', ['booking' => $booking]);
         } else {
-            abort(401);
-        }
+            echo $response->message();
+        }                 
     }
 
     /**
@@ -142,12 +143,11 @@ class BookingController extends Controller
      * @param  \App\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function edit(Booking $booking, Request $request)
+    public function edit($lang, Booking $booking, Request $request)
     {
-        $employeeAndAdminUsers = getEmployeeUsersAndAdmin();
+        $response = Gate::inspect('update', $booking);
 
-        if (in_array($request->user()->id, $employeeAndAdminUsers) || 
-        $request->user()->id === $booking->doctor->user_id) {
+        if (auth()->user()->can('update', $booking)) {
             $currentDoctor = Doctor::all()->find($booking->doctor_id);
             $doctors = Doctor::all();
             $bookingReasons = BookingReason::all();
@@ -164,7 +164,7 @@ class BookingController extends Controller
                 ->with('doctors', $doctors)
                 ->with('bookingReasons', $bookingReasons);
         } else {
-            abort(401);
+            echo $response->message();
         }
     }
 
@@ -175,33 +175,33 @@ class BookingController extends Controller
      * @param  \App\Booking  $booking
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Booking $booking)
+    public function update($lang, Request $request, Booking $booking)
     {
-        $employeeAndAdminUsers = getEmployeeUsersAndAdmin();
+        $response = Gate::inspect('update', $booking);
 
-        if (in_array($request->user()->id, $employeeAndAdminUsers) || $request->user()->id === $booking->doctor->user_id) {
+        if (auth()->user()->can('update', $booking)) {
             $previousUser_id = $booking->user_id;
             $previousDoctor_id = $booking->doctor_id;
             // dd($user_id);
-
+    
             $booking->update($request->input());
-
+    
             $booking->patient->update([
                 'name' => $request->input('name'),
                 'surname' => $request->input('surname'),
                 'phone_number' => $request->input('phone_number'),
                 'citizenship_number' => $request->input('citizenship_number')
             ]);
-
+    
             // dd(count(Booking::all()->where('user_id', '=', $previousUser_id)));
-
+    
             if (count(Booking::all()->where('user_id', '=', $previousUser_id)) == 0) {
                 DB::table('role_user')->where([
                     ['user_id', '=', $previousUser_id],
                     ['role_id', '=', 3],
                 ])->delete();
             }
-
+    
             if (count(DB::table('bookings')->where([
                 ['user_id', '=', $previousUser_id],
                 ['patient_id', '=', $booking->patient_id],
@@ -211,7 +211,7 @@ class BookingController extends Controller
                     ['patient_id', '=', $booking->patient_id],
                 ])->delete();
             }
-
+    
             if (count(DB::table('bookings')->where([
                 ['doctor_id', '=', $previousDoctor_id],
                 ['patient_id', '=', $booking->patient_id],
@@ -221,19 +221,19 @@ class BookingController extends Controller
                     ['patient_id', '=', $booking->patient_id],
                 ])->delete();
             }
-
+    
             $user = User::find($request->input('user_id'));
-            $user->roles()->syncWithoutDetaching(3);
-
+            $user->roles()->syncWithoutDetaching(2);
+    
             $user->patients()->syncWithoutDetaching($booking->patient_id);
-
+    
             // Aslında doktor hasta ilişkisi aktif olup olmadığı da önemli olabilir. Bu şu an düşünülmedi.
             $booking->patient->doctors()->syncWithoutDetaching($booking->doctor_id);
-
-            return redirect()->action('BookingController@index');
+    
+            return redirect()->action('HomeController@index', ['locale' => App::getLocale()]);
         } else {
-            abort(401);
-        }
+            echo $response->message();
+        }    
     }
 
     /**
@@ -244,10 +244,9 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking, Request $request)
     {
-        $employeeAndAdminUsers = getEmployeeUsersAndAdmin();
+        $response = Gate::inspect('delete', $booking);
 
-        if (in_array($request->user()->id, $employeeAndAdminUsers) || 
-        $request->user()->id === $booking->doctor->user_id) {
+        if (auth()->user()->can('delete', $booking)) {
             $bookingPatient = $booking->patient;
             $booking->delete();
             $activeBookingOfPatient = Booking::where('is_materialized', '!=', false)->orWhereNull('is_materialized')
@@ -258,9 +257,9 @@ class BookingController extends Controller
                 $bookingPatient->users()->detach();
                 $bookingPatient->doctors()->detach();
             }
-            return redirect()->action('BookingController@index');
+            return redirect()->action('BookingController@index', ['locale' => App::getLocale()]);
         } else {
-            abort(401);
+            echo $response->message();
         }
     }
 }

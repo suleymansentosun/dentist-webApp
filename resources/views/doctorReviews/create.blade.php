@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="col">
-<form action="{{ route('doctorReviews.store') }}" method="POST">
+<form action="{{ route('doctorReviews.store', app()->getLocale()) }}" method="POST">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label"for="patient_id">Hasta</label>
         <div class="col-sm-10">
@@ -58,7 +58,7 @@
             <button type="submit" class="btn btn-primary">Yorum Ekle</button>
         </div>
         <div class="col-sm-9">
-            <a href="{{ route('bookings.index') }}" class="btn btn-secondary">İptal</a>
+            <a href="{{ route('bookings.index', app()->getLocale()) }}" class="btn btn-secondary">İptal</a>
         </div>
     </div>
 </form>

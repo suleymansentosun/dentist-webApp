@@ -1,23 +1,50 @@
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
+currentUrl = window.location.href;
+languageOfSite = currentUrl.slice(20, 22);
 
 var chart;
 
 function drawChart() {
     $.ajax({
-        url: "/getInstrumentalFactorsInFindingDentistLastTwentyWeeks",
+        url: `/${languageOfSite}/getInstrumentalFactorsInFindingDentistLastTwentyWeeks`,
         dataType: "json",
         success: function(instrumentalFactors) {
-            var data = google.visualization.arrayToDataTable([
-                ['Etken Faktör', 'Sayı'],
-                ['Web Araması', instrumentalFactors[0]],
-                ['Tavsiye', instrumentalFactors[1]],
-                ['Sosyal Medya', instrumentalFactors[2]],
-                ['Yer Yakınlığı', instrumentalFactors[3]],
-            ]);
-        
+            switch (languageOfSite) {
+                case 'tr':
+                  var data = google.visualization.arrayToDataTable([
+                      ['Etken Faktör', 'Sayı'],
+                      ['Web Araması', instrumentalFactors[0]],
+                      ['Tavsiye', instrumentalFactors[1]],
+                      ['Sosyal Medya', instrumentalFactors[2]],
+                      ['Yer Yakınlığı', instrumentalFactors[3]],
+                  ]);
+                  break;
+                case 'en':
+                    var data = google.visualization.arrayToDataTable([
+                        ['Etken Faktör', 'Sayı'],
+                        ['Web Search', instrumentalFactors[0]],
+                        ['Advice', instrumentalFactors[1]],
+                        ['Social Media', instrumentalFactors[2]],
+                        ['Neighbour', instrumentalFactors[3]],
+                    ]);
+                    break;
+                default:
+                    var data = google.visualization.arrayToDataTable([
+                        ['Etken Faktör', 'Sayı'],
+                        ['Web Search', instrumentalFactors[0]],
+                        ['Advice', instrumentalFactors[1]],
+                        ['Social Media', instrumentalFactors[2]],
+                        ['Neighbour', instrumentalFactors[3]],
+                    ]);
+            }
+                    
             var options = {
-                title: 'Kliniğimizi Nasıl Keşfettiler (20 Haftalık Toplam Dağılım)',
+                title: languageOfSite == 'tr' ? 
+                'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)' 
+                : languageOfSite == 'en' ? 
+                'What are the effective factors in finding our hospital? (Distribution on a weekly basis)' : 
+                'What are the effective factors in finding our hospital? (Distribution on a weekly basis)',
                 is3D: true,
             };
         
@@ -32,19 +59,44 @@ $(document).ready(function() {
     $("#weeklyData_btn").on("click", function() {
         $("#instrumentalFactorsInFindingPieChart").show();
         $.ajax({
-            url: "/getInstrumentalFactorsInFindingDentistLastTwentyWeeks",
+            url: `/${languageOfSite}/getInstrumentalFactorsInFindingDentistLastTwentyWeeks`,
             dataType: "json",
             success: function(instrumentalFactors) {
-                var data = google.visualization.arrayToDataTable([
-                    ['Etken Faktör', 'Sayı'],
-                    ['Web Araması', instrumentalFactors[0]],
-                    ['Tavsiye', instrumentalFactors[1]],
-                    ['Sosyal Medya', instrumentalFactors[2]],
-                    ['Yer Yakınlığı', instrumentalFactors[3]],
-                ]);
+                switch (languageOfSite) {
+                    case 'tr':
+                      var data = google.visualization.arrayToDataTable([
+                          ['Etken Faktör', 'Sayı'],
+                          ['Web Araması', instrumentalFactors[0]],
+                          ['Tavsiye', instrumentalFactors[1]],
+                          ['Sosyal Medya', instrumentalFactors[2]],
+                          ['Yer Yakınlığı', instrumentalFactors[3]],
+                      ]);
+                      break;
+                    case 'en':
+                        var data = google.visualization.arrayToDataTable([
+                            ['Etken Faktör', 'Sayı'],
+                            ['Web Search', instrumentalFactors[0]],
+                            ['Advice', instrumentalFactors[1]],
+                            ['Social Media', instrumentalFactors[2]],
+                            ['Neighbour', instrumentalFactors[3]],
+                        ]);
+                        break;
+                    default:
+                        var data = google.visualization.arrayToDataTable([
+                            ['Etken Faktör', 'Sayı'],
+                            ['Web Search', instrumentalFactors[0]],
+                            ['Advice', instrumentalFactors[1]],
+                            ['Social Media', instrumentalFactors[2]],
+                            ['Neighbour', instrumentalFactors[3]],
+                        ]);
+                }
             
                 var options = {
-                    title: 'Kliniğimizi Nasıl Keşfettiler (20 Haftalık Toplam Dağılım)',
+                    title: languageOfSite == 'tr' ? 
+                    'Kliniğimizi Nasıl Keşfettiler (Haftalık Bazda Dağılım)' 
+                    : languageOfSite == 'en' ? 
+                    'What are the effective factors in finding our hospital? (Distribution on a weekly basis)' : 
+                    'What are the effective factors in finding our hospital? (Distribution on a weekly basis)',
                     is3D: true,
                 };
             
@@ -62,19 +114,44 @@ $(document).ready(function() {
     $("#monthlyData_btn").on("click", function() {
         $("#instrumentalFactorsInFindingPieChart").show();
         $.ajax({
-            url: "/getInstrumentalFactorsInFindingDentistLastTenMonths",
+            url: `/${languageOfSite}/getInstrumentalFactorsInFindingDentistLastTenMonths`,
             dataType: "json",
             success: function(instrumentalFactors) {
-                var data = google.visualization.arrayToDataTable([
-                    ['Etken Faktör', 'Sayı'],
-                    ['Web Araması', instrumentalFactors[0]],
-                    ['Tavsiye', instrumentalFactors[1]],
-                    ['Sosyal Medya', instrumentalFactors[2]],
-                    ['Yer Yakınlığı', instrumentalFactors[3]],
-                ]);
+                switch (languageOfSite) {
+                    case 'tr':
+                      var data = google.visualization.arrayToDataTable([
+                          ['Etken Faktör', 'Sayı'],
+                          ['Web Araması', instrumentalFactors[0]],
+                          ['Tavsiye', instrumentalFactors[1]],
+                          ['Sosyal Medya', instrumentalFactors[2]],
+                          ['Yer Yakınlığı', instrumentalFactors[3]],
+                      ]);
+                      break;
+                    case 'en':
+                        var data = google.visualization.arrayToDataTable([
+                            ['Etken Faktör', 'Sayı'],
+                            ['Web Search', instrumentalFactors[0]],
+                            ['Advice', instrumentalFactors[1]],
+                            ['Social Media', instrumentalFactors[2]],
+                            ['Neighbour', instrumentalFactors[3]],
+                        ]);
+                        break;
+                    default:
+                        var data = google.visualization.arrayToDataTable([
+                            ['Etken Faktör', 'Sayı'],
+                            ['Web Search', instrumentalFactors[0]],
+                            ['Advice', instrumentalFactors[1]],
+                            ['Social Media', instrumentalFactors[2]],
+                            ['Neighbour', instrumentalFactors[3]],
+                        ]);
+                }
             
                 var options = {
-                    title: 'Kliniğimizi Nasıl Keşfettiler (10 Aylık Toplam Dağılım)',
+                    title: languageOfSite == 'tr' ? 
+                    'Kliniğimizi Nasıl Keşfettiler (Aylık Bazda Dağılım)' 
+                    : languageOfSite == 'en' ? 
+                    'What are the effective factors in finding our hospital? (Distribution on a monthly basis)' : 
+                    'What are the effective factors in finding our hospital? (Distribution on a monthly basis)',
                     is3D: true,
                 };
             

@@ -1,17 +1,32 @@
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
+currentUrl = window.location.href;
+languageOfSite = currentUrl.slice(20, 22);
 
 var chart;
 
 function drawChart() {
     $.ajax({
-        url: "/getWeeklyPatientDatas",
+        url: `/${languageOfSite}/getWeeklyPatientDatas`,
         dataType: "json",
         success: function(patientCountPerWeek) {
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Tarih');
-            data.addColumn('number', 'Hasta Sayısı');
-            data.addColumn('number', 'Ortalama Hasta Sayısı');
+            switch (languageOfSite) {
+                case 'tr':
+                  data.addColumn('date', 'Tarih');
+                  data.addColumn('number', 'Hasta Sayısı');
+                  data.addColumn('number', 'Ortalama Hasta Sayısı');
+                  break;
+                case 'en':
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Patient Count');
+                  data.addColumn('number', 'Average number of patients');
+                  break;
+                default:
+                  data.addColumn('date', 'Date');
+                  data.addColumn('number', 'Patient Count');
+                  data.addColumn('number', 'Average number of patients');
+            }
 
             patientCountPerWeek = patientCountPerWeek.map((item) => {
                 item = [new Date(item[0]), item[1], item[2]];
@@ -22,11 +37,11 @@ function drawChart() {
 
             // Set chart options
             var options = {
-                'title':'Kazanılan Hasta Sayısı',
+                'title': languageOfSite == 'tr' ? 'Hasta Sayısı' : languageOfSite == 'en' ? 'Patient Count' : 'Patient Count',
                 'width':1000,
                 'height':300,
                 hAxis: {
-                    title: 'Tarih',
+                    title: languageOfSite == 'tr' ? 'Tarih' : languageOfSite == 'en' ? 'Date' : 'Date',
                     format: 'd/MM/Y',
                     titleTextStyle: {
                         color: '#0000',
@@ -46,13 +61,26 @@ function drawChart() {
 $(document).ready(function() {
     $("#weeklyData_btn").on("click", function() {
         $.ajax({
-            url: "/getWeeklyPatientDatas",
+            url: `/${languageOfSite}/getWeeklyPatientDatas`,
             dataType: "json",
             success: function(patientCountPerWeek) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Hasta Sayısı');
-                data.addColumn('number', 'Ortalama Hasta Sayısı');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Hasta Sayısı');
+                      data.addColumn('number', 'Ortalama Hasta Sayısı');
+                      break;
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                }
     
                 patientCountPerWeek = patientCountPerWeek.map((item) => {
                     item = [new Date(item[0]), item[1], item[2]];
@@ -63,11 +91,11 @@ $(document).ready(function() {
 
                 // Set chart options
                 var options = {
-                    'title':'Kazanılan Hasta Sayısı',
+                    'title': languageOfSite == 'tr' ? 'Hasta Sayısı' : languageOfSite == 'en' ? 'Patient Count' : 'Patient Count',
                     'width':1000,
                     'height':300,
                     hAxis: {
-                        title: 'Tarih',
+                        title: languageOfSite == 'tr' ? 'Tarih' : languageOfSite == 'en' ? 'Date' : 'Date',
                         format: 'd/MM/Y',
                         titleTextStyle: {
                             color: '#0000',
@@ -86,14 +114,27 @@ $(document).ready(function() {
 
     $("#dailyData_btn").on("click", function() {
         $.ajax({
-            url: "/getDailyPatientDatas",
+            url: `/${languageOfSite}/getDailyPatientDatas`,
             dataType: "json",
             success: function(patientCountsPerDate) {
                 // Create our data table out of JSON data loaded from server.
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Hasta Sayısı');
-                data.addColumn('number', 'Ortalama Hasta Sayısı');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Hasta Sayısı');
+                      data.addColumn('number', 'Ortalama Hasta Sayısı');
+                      break;
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                }
     
                 patientCountsPerDate = patientCountsPerDate.map((item) => {
                     item = [new Date(item[0]), item[1], item[2]];
@@ -104,11 +145,11 @@ $(document).ready(function() {
     
                 // Set chart options
                 var options = {
-                    'title':'Kazanılan Hasta Sayısı',
+                    'title': languageOfSite == 'tr' ? 'Hasta Sayısı' : languageOfSite == 'en' ? 'Patient Count' : 'Patient Count',
                     'width':1000,
                     'height':300,
                     hAxis: {
-                        title: 'Tarih',
+                        title: languageOfSite == 'tr' ? 'Tarih' : languageOfSite == 'en' ? 'Date' : 'Date',
                         format: 'd/MM/Y',
                         titleTextStyle: {
                             color: '#0000',
@@ -127,13 +168,26 @@ $(document).ready(function() {
 
     $("#monthlyData_btn").on("click", function() {
         $.ajax({
-            url: "/getMonthlyPatientDatas",
+            url: `/${languageOfSite}/getMonthlyPatientDatas`,
             dataType: "json",
             success: function(patientCountPerMonth) {
                 var data = new google.visualization.DataTable();
-                data.addColumn('date', 'Tarih');
-                data.addColumn('number', 'Hasta Sayısı');
-                data.addColumn('number', 'Ortalama Hasta Sayısı');
+                switch (languageOfSite) {
+                    case 'tr':
+                      data.addColumn('date', 'Tarih');
+                      data.addColumn('number', 'Hasta Sayısı');
+                      data.addColumn('number', 'Ortalama Hasta Sayısı');
+                      break;
+                    case 'en':
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                      break;
+                    default:
+                      data.addColumn('date', 'Date');
+                      data.addColumn('number', 'Patient Count');
+                      data.addColumn('number', 'Average number of patients');
+                }
     
                 patientCountPerMonth = patientCountPerMonth.map((item) => {
                     item = [new Date(item[0]), item[1], item[2]];
@@ -144,11 +198,11 @@ $(document).ready(function() {
 
                 // Set chart options
                 var options = {
-                    'title':'Kazanılan Hasta Sayısı',
+                    'title': languageOfSite == 'tr' ? 'Hasta Sayısı' : languageOfSite == 'en' ? 'Patient Count' : 'Patient Count',
                     'width':1000,
                     'height':300,
                     hAxis: {
-                        title: 'Tarih',
+                        title: languageOfSite == 'tr' ? 'Tarih' : languageOfSite == 'en' ? 'Date' : 'Date',
                         format: 'd/MM/Y',
                         titleTextStyle: {
                             color: '#0000',

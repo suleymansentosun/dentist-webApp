@@ -9,7 +9,8 @@ class BookingReason extends Model
     public $table = "bookingReasons";
 
     protected $fillable = [
-        'name'
+        'name',
+        'nameEn'
     ];
 
     public function bookings() 

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use App;
 
 class IsAdmin
 {
@@ -19,7 +20,7 @@ class IsAdmin
         if (Auth::check() && $request->user()->hasRole('Admin')) {
             return $next($request);
         } else {
-            return redirect('home');
+            return redirect('/' . App::getLocale());    
         }
     }
 }

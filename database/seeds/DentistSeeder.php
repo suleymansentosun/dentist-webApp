@@ -46,43 +46,50 @@ class DentistSeeder extends Seeder
 
         DB::table('specialties')->insert([
             'name' => 'İmplantoloji',
+            'nameEn' => 'Implant',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
             'name' => 'Estetik Diş Hekimliği',
+            'nameEn' => 'Dental Cosmetics',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
             'name' => 'Kanal Tedavisi',
+            'nameEn' => 'Root Canal Therapy',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
             'name' => 'Prototetik Diş Tedavisi',
+            'nameEn' => 'Prosthetic Dentistry',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
-            'name' => 'Periadontoloji',
+            'name' => 'Periodontoloji',
+            'nameEn' => 'Periodontology',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
             'name' => 'Ortodonti',
+            'nameEn' => 'Orthodontics',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('specialties')->insert([
             'name' => 'Sedasyon ve Genel Anestezi',
+            'nameEn' => 'Sedation and General Anesthesia',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         DB::table('users')->insert([
-            'name' => 'umurarikan',
-            'email' => "umurarikan@gmail.com",
+            'name' => 'admin',
+            'email' => "admin@gmail.com",
             'password' => \Hash::make('admin'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
@@ -103,21 +110,25 @@ class DentistSeeder extends Seeder
 
         DB::table('bookingReasons')->insert([
             'name' => 'Diş Ağrısı',
+            'nameEn' => 'Toothache',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('bookingReasons')->insert([
             'name' => 'Diş Estetiği',
+            'nameEn' => 'Cosmetic Dentistry',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('bookingReasons')->insert([
             'name' => 'Diş Bakımı',
+            'nameEn' => 'Dental Care',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         DB::table('bookingReasons')->insert([
             'name' => 'Eksik Diş',
+            'nameEn' => 'Missing Teeth',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

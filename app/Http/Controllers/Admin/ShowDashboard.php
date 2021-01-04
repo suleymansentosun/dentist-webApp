@@ -8,24 +8,32 @@ use App\Booking;
 use App\User;
 use App\Patient;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
 
 class ShowDashboard extends Controller
 {
     /**
      * Show the application admin dashboard.
      */
-    public function __invoke(): View
+    public function showDashboard()
     {
-        $bookings = Booking::whereDate('created_at', Carbon::today())->get();
+        $response = Gate::inspect('view-admin-dashboard');
 
-        $matchThese = ['is_materialized' => 1, 'hasMaterializedBookingBefore' => 0];
-        $registeredPatientsForTheFirstTime = Booking::whereDate('booking_date', Carbon::today())->where($matchThese)->get();
-        
-        $users = User::whereDate('created_at', Carbon::today())->get();
+        if ($response->allowed()) {
+            $bookings = Booking::whereDate('created_at', Carbon::today())->get();
 
-        return view('admin.dashboard.index')
-            ->with('bookings', $bookings)
-            ->with('registeredPatientsForTheFirstTime', $registeredPatientsForTheFirstTime)
-            ->with('users', $users);
+            $matchThese = ['is_materialized' => 1, 'hasMaterializedBookingBefore' => 0];
+            $registeredPatientsForTheFirstTime = Booking::whereDate('booking_date', Carbon::today())->where($matchThese)->get();
+            
+            $users = User::whereDate('created_at', Carbon::today())->get();
+    
+            return view('admin.dashboard.index')
+                ->with('bookings', $bookings)
+                ->with('registeredPatientsForTheFirstTime', $registeredPatientsForTheFirstTime)
+                ->with('users', $users);
+        } else {
+            echo $response->message();
+        }
     }
 }

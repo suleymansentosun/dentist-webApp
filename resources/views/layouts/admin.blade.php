@@ -45,14 +45,14 @@
            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
          </li>
          <li class="nav-item d-none d-sm-inline-block">
-           <a href="/" class="nav-link">Ana Sayfa</a>
+           <a href="/" class="nav-link">{{__('Ana Sayfa')}}</a>
          </li>
        </ul>
 
        <!-- SEARCH FORM -->
        <form class="form-inline ml-3">
          <div class="input-group input-group-sm">
-           <input class="form-control form-control-navbar" type="search" placeholder="Ara" aria-label="Search">
+           <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
            <div class="input-group-append">
              <button class="btn btn-navbar" type="submit">
                <i class="fas fa-search"></i>
@@ -71,13 +71,13 @@
      <aside class="main-sidebar sidebar-dark-primary elevation-4">
        <!-- Brand Logo -->
        @if (Auth::user()->hasRole('Admin'))
-         <a href="{{ action('Admin\ShowDashboard') }}" class="brand-link">
+         <a href="{{ action('Admin\ShowDashboard@showDashboard', ['locale' => app()->getLocale()]) }}" class="brand-link">
        @elseif (Auth::user()->hasRole('Doctor'))
-         <a href="{{ action('Doctor\DoctorDashboardController@showDashboard') }}" class="brand-link">
+         <a href="{{ action('Doctor\DoctorDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}" class="brand-link">
        @elseif (Auth::user()->hasRole('Employee'))
-         <a href="{{ action('Employee\EmployeeDashboardController@showDashboard') }}" class="brand-link">
+         <a href="{{ action('Employee\EmployeeDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}" class="brand-link">
        @elseif (Auth::user()->hasRole('Patient'))
-         <a href="{{ action('Patient\PatientDashboardController@showDashboard') }}" class="brand-link">
+         <a href="{{ action('Patient\PatientDashboardController@showDashboard', ['locale' => app()->getLocale()]) }}" class="brand-link">
        @else                  
        @endif
          <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -93,7 +93,7 @@
              <img src="" class="img-circle elevation-2" alt="User Image">
            </div> -->
            <div class="info">
-             <a href="{{ action('UserController@show', ['user' => Auth::id()]) }}" class="d-block">
+             <a href="{{ action('UserController@show', ['locale' => app()->getLocale(), 'user' => Auth::id()]) }}" class="d-block">
                {{ Auth::user()->name }}
               </a>
            </div>
@@ -101,13 +101,13 @@
      @show
 
      <!-- Content Wrapper. Contains page content -->
-     <div class="content-wrapper">
+     <div class="content-wrapper p-3">
        @yield('content')
      </div>
      <!-- /.content-wrapper -->
      <footer class="main-footer">
        <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-       All rights reserved.
+       {{__('Tüm Hakları Korunmuştur')}}
        <div class="float-right d-none d-sm-inline-block">
          <b>Version</b> 3.0.5
        </div>

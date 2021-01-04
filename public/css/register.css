@@ -87,11 +87,10 @@ div.card-header p {
 
     div#registerSvg img{
         position: absolute;
-        left: 20%;
+        left: 30%;
         bottom: -12%;
         width: 100vw!important;
         height: 100vh!important;
-        z-index: 1;
     }
     div.card {
         padding-left: 0;
@@ -104,6 +103,6 @@ div.card-header p {
 
 @media (min-width: 1300px) {
     div#registerSvg img{
-        left: 18%;
+        left: 24%;
     }
 }

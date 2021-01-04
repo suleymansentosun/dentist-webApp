@@ -68,5 +68,8 @@ class Kernel extends HttpKernel
         'isDoctor' => \App\Http\Middleware\IsDoctor::class,
         'isEmployee' => \App\Http\Middleware\IsEmployee::class,
         'isAdminOrEmployee' => \App\Http\Middleware\IsAdminOrEmployee::class,
+        'setlocale' => \App\Http\Middleware\SetLocale::class,
+        'detectClientLanguage' => \App\Http\Middleware\DetectClientLanguage::class,
+        'checkBookingDateAndTime' => \App\Http\Middleware\CheckBookingDateAndTime::class,
     ];
 }

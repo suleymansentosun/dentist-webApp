@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\Response;
+use App;
 
 class UserController extends Controller
 {
@@ -14,9 +18,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(10);
-        return view('users.index')
-            ->with('users', $users);
+        $response = Gate::inspect('viewAny', User::class);
+
+        if (auth()->user()->can('viewAny', User::class)) {
+            $users = User::paginate(10);
+            return view('users.index')
+                ->with('users', $users);
+        } else {
+            echo $response->message();
+        }
     }
 
     /**
@@ -46,9 +56,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($lang, User $user)
     {
-        return view('users.show', ['user' => $user]);
+        $response = Gate::inspect('view', $user);
+
+        if (auth()->user()->can('view', $user)) {
+            return view('users.show', ['user' => $user]);
+        } else {
+            echo $response->message();
+        }        
     }
 
     /**
@@ -57,9 +73,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($lang, $id)
     {
-        //
+        $user = User::find($id);
+
+        $response = Gate::inspect('update', $user);
+
+        if (auth()->user()->can('update', $user)) {
+            return view('users.edit')
+            ->with('user', $user);
+        } else {
+            echo $response->message();
+        }   
     }
 
     /**
@@ -69,9 +94,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($lang, Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        $response = Gate::inspect('update', $user);
+
+        if (auth()->user()->can('update', $user)) {
+            $user->update($request->input());
+            return redirect()->route('responseUpdate', ['locale' => App::getLocale()]);
+        } else {
+            echo $response->message();
+        }   
     }
 
     /**
@@ -80,8 +114,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($lang, User $user)
     {
-        //
+        $response = Gate::inspect('delete', $user);
+
+        if (auth()->user()->can('delete', $user)) {
+            $user->roles()->detach();
+            $user->doctor()->delete();
+            $user->delete();
+            
+            if ($loggedInUser->hasRole('Admin')) {
+                return redirect()->action('UserController@index', ['locale' => App::getLocale()]);
+            } else {
+                return redirect('/home');
+            }    
+        } else {
+            echo $response->message();
+        }               
     }
 }

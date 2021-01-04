@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('buttons')
-<a class="btn btn-primary" href="{{ route('roles.create') }}" role="button">Rol Ekle</a>
+<a class="btn btn-primary" href="{{ route('roles.create', app()->getLocale()) }}" role="button">Rol Ekle</a>
 @endsection
 
 @section('content')
@@ -24,12 +24,12 @@
                 <td>{{ date('F d, Y', strtotime($role->created_at)) }}</td>
                 <td class="actions">
                     <a
-                        href="{{ action('RoleController@edit', ['role' => $role->id]) }}"
+                        href="{{ action('RoleController@edit', ['locale' => app()->getLocale(), 'role' => $role->id]) }}"
                         alt="Edit"
                         title="Edit">
                       Düzenle
                     </a>
-                    <form action="{{ action('RoleController@destroy', ['role' => $role->id]) }}" method="POST">
+                    <form action="{{ action('RoleController@destroy', ['locale' => app()->getLocale(), 'role' => $role->id]) }}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-link" title="Delete" value="SİL">

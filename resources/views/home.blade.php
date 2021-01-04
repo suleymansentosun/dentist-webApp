@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    {{__('Giriş Yaptınız. Hoşgeldiniz!')}}
                 </div>
             </div>
         </div>

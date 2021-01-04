@@ -350,6 +350,16 @@
     padding-top: 11px;
   }
 
+  #language_menu {
+    min-width: auto;
+    left: -35%;
+  }
+
+  .btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(160 163 167 / 25%);
+  }
+
   /* RESPONSIVE CSS
   -------------------------------------------------- */
 
@@ -496,6 +506,15 @@
     #social_media_icon_container {
       justify-content: center;
     }
+    .social-media-icon {
+      margin-left: 0px;
+      padding-left: 5px;
+      padding-right: 5px;
+      width: 50px;
+    }
+    #language_menu {
+      left: -5%;
+    }
   }
 
   @media (max-width: 868px) {
@@ -549,6 +568,9 @@
     }
     .navbar-toggler-icon {
       width: 1.1em;
+    }
+    #language_menu {
+      left: 37%;
     }
   }
 
@@ -608,7 +630,7 @@
   @media (max-width: 400px) {
     .myc-available-time-for-one-doctor a {
       font-size: 1em;
-      width: 35px;
+      width: 40px;
       height: 25px;
     }
     a.expiredTime {
@@ -619,6 +641,15 @@
     }
     .bg-image-1 {
       background-position: 90% 50%;
+    }
+    div#doctor_card div.card-body {
+      margin-left: 0px;
+    }
+  }
+
+  @media (max-width: 344px) {
+    .myc-available-time-for-one-doctor a {
+      width: 35px;
     }
   }
 
