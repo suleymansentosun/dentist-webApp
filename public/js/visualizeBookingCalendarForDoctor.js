@@ -1,7 +1,7 @@
 google.charts.load('current', {packages:['calendar']});
 google.charts.setOnLoadCallback(drawChart);
-let currentUrl = window.location.href;
-let languageOfSite = currentUrl.slice(20, 22);
+let urlSegments = window.location.pathname.split("/");
+let languageOfSite = urlSegments[1];
 
 function drawChart() {
     $.ajax({

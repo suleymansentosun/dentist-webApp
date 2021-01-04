@@ -1,8 +1,8 @@
 let counter = document.getElementById('notification_bell');
 let notification_header = document.getElementById('notification_header');
 let spesific_notification = document.getElementById('spesific_notification');
-let currentUrl = window.location.href;
-let languageOfSite = currentUrl.slice(20, 22);
+let urlSegments = window.location.pathname.split("/");
+let languageOfSite = urlSegments[1];
 
 let patientsOfNotifiedAppointments;
 

@@ -1,7 +1,7 @@
 google.charts.load('current', {packages: ['corechart', 'bar']});
 google.charts.setOnLoadCallback(drawMultSeries);
-currentUrl = window.location.href;
-languageOfSite = currentUrl.slice(20, 22);
+let urlSegments = window.location.pathname.split("/");
+let languageOfSite = urlSegments[1];
 
 var chart;
 

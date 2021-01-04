@@ -5,8 +5,8 @@ let doctorInfos;
 let relatedDoctorsListElement = document.getElementById('relatedDoctorInfos');
 let availableBookingsForRelatedDoctors = [];
 let doctorIds = [];
-let currentUrl = window.location.href;
-let languageOfSite = currentUrl.slice(20, 22);
+let urlSegments = window.location.pathname.split("/");
+let languageOfSite = urlSegments[1];
 
 function getAllBookingReasons() {
     let xhr = new XMLHttpRequest();
